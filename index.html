@@ -2,109 +2,255 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Anki'ye ekle</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Anki Ekle">
-<meta name="theme-color" content="#0b0b0c">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#F4F6FB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A1330" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fafaf8;--fg:#18181a;--mut:#85857f;--line:#e6e6e1;--soft:#f1f1ed;--acc:#2f6feb;--ok:#1b7f45;--err:#c0352b}
-@media (prefers-color-scheme:dark){:root{--bg:#0b0b0c;--fg:#f1f1ee;--mut:#8d8d88;--line:#232326;--soft:#161618;--acc:#7aaeff;--ok:#4cc27d;--err:#ff7a70}}
+:root{
+  --bg:#F4F6FB;--surface:#FFFFFF;--ink:#121A33;--mut:#5F6A8C;--line:#DCE2F0;
+  --delft:#1E3F9C;--delft-ink:#1E3F9C;--delft-soft:#E3E9F8;--tile-line:#CBD6EF;--pattern:.16;
+  --oranje:#CC4F05;--oranje-ink:#FFFFFF;--ok:#1F7A51;--err:#B83434;
+  --ui:"Bricolage Grotesque",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --read:"Literata",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0A1330;--surface:#111D45;--ink:#EEF1FA;--mut:#9AA6CC;--line:#22305E;
+  --delft:#6C8FF2;--delft-ink:#B3C8FF;--delft-soft:#1D2E68;--tile-line:#27397A;--pattern:.30;
+  --oranje:#FF8A3D;--oranje-ink:#1F0D00;--ok:#5BCB95;--err:#FF8787;
+}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
-main{max-width:560px;margin:0 auto;padding:20px 20px 130px}
-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px}
-h1{font-size:22px;font-weight:650;letter-spacing:-.01em;margin:0}
-.link{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--mut);cursor:pointer}
-.link:active{color:var(--fg)}
-label{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
-input,select,textarea{width:100%;font:inherit;color:var(--fg);background:var(--soft);border:1px solid transparent;border-radius:12px;padding:12px 14px;outline:none;-webkit-appearance:none;appearance:none}
-input:focus,select:focus,textarea:focus{border-color:var(--line)}
-select{background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px;text-overflow:ellipsis}
-textarea{min-height:130px;resize:vertical;line-height:1.45}
-.field{margin-bottom:22px}
-.inline{display:flex;gap:8px;margin-top:8px}
-.inline input{flex:1}
-.panel{background:var(--soft);border-radius:14px;padding:16px;margin:-8px 0 24px}
-.panel .field{margin-bottom:14px}
-.panel .field:last-child{margin-bottom:0}
-.panel input{background:var(--bg)}
-.two{display:flex;gap:10px}.two>div{flex:1}
-.hint{font-size:13px;color:var(--mut);margin:8px 0 0}
-.btn{display:flex;align-items:center;justify-content:center;min-height:50px;padding:0 18px;border-radius:14px;border:0;background:var(--fg);color:var(--bg);font:inherit;font-weight:600;text-decoration:none;width:100%;cursor:pointer}
-.btn.small{min-height:40px;width:auto;font-size:14px;padding:0 16px;border-radius:12px}
-.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
-.btn[aria-disabled=true]{opacity:.3;pointer-events:none}
-.sum{font-size:13px;color:var(--mut);margin:26px 0 10px}
-.card{padding:14px 0;border-top:1px solid var(--line)}
-.card:last-child{border-bottom:1px solid var(--line)}
-.card.sent .front,.card.sent .back{opacity:.45}
-.front{margin:0 0 4px;font-size:17px;line-height:1.4}
-.back{margin:0;color:var(--mut);font-size:14px}
-mark{background:none;color:var(--acc);font-weight:600}
-.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;min-height:40px}
-.st{font-size:13px;color:var(--mut)}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--ui);font-optical-sizing:auto}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--delft);outline-offset:2px;border-radius:8px}
+
+/* header with Delft tile band */
+.top{position:relative;padding:calc(env(safe-area-inset-top) + 18px) 20px 18px;overflow:hidden}
+.tiles{position:absolute;inset:0;color:var(--delft);opacity:var(--pattern);pointer-events:none;
+  -webkit-mask-image:linear-gradient(to bottom,#000 10%,transparent 95%);mask-image:linear-gradient(to bottom,#000 10%,transparent 95%)}
+.tiles svg{width:100%;height:100%;display:block}
+.head{position:relative;max-width:560px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.logo{width:46px;height:46px;flex:none;border-radius:13px;box-shadow:0 6px 18px -8px rgba(30,63,156,.6)}
+h1{margin:0;font-size:27px;line-height:1.1;font-weight:760;letter-spacing:-.02em;font-variation-settings:"opsz" 96}
+.sub{margin:2px 0 0;font-size:14px;color:var(--mut)}
+.icon-btn{margin-left:auto;width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:22px;height:22px}
+
+main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
+.lbl{font-size:14px;font-weight:600;color:var(--mut);margin:0 0 10px}
+
+/* deck chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid var(--line);background:var(--surface);
+  border-radius:999px;padding:9px 15px;font-size:15px;font-weight:550;cursor:pointer}
+.chip.on{background:var(--delft);border-color:var(--delft);color:#fff}
+@media (prefers-color-scheme:dark){.chip.on{color:#0A1330}}
+.chip.add{background:transparent;border-style:dashed;color:var(--mut)}
+.newdeck{margin-top:12px}
+.row{display:flex;gap:8px}
+.row input{flex:1;min-width:0}
+.note{font-size:13px;color:var(--mut);margin:8px 2px 0}
+
+/* inputs */
+.input{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px;outline:none}
+.input:focus{border-color:var(--delft)}
+.btn{border:0;border-radius:12px;padding:0 16px;min-height:44px;font-weight:650;cursor:pointer;background:var(--delft);color:#fff;white-space:nowrap}
+@media (prefers-color-scheme:dark){.btn{color:#0A1330}}
+.btn.quiet{background:transparent;color:var(--mut);border:1px solid var(--line)}
+
+/* paste box */
+.paste{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.paste:focus-within{border-color:var(--delft)}
+.paste textarea{display:block;width:100%;min-height:120px;resize:vertical;border:0;outline:none;background:transparent;padding:16px 16px 8px;font:15px/1.5 -apple-system,system-ui,sans-serif}
+.paste textarea::placeholder{color:var(--mut)}
+.paste-bar{display:flex;align-items:center;gap:8px;padding:8px 10px 10px}
+.pbtn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:11px;padding:0 14px;min-height:40px;background:var(--delft-soft);color:var(--delft-ink);font-weight:650;cursor:pointer}
+.pbtn svg{width:18px;height:18px}
+.tbtn{margin-left:auto;border:0;background:none;color:var(--mut);font-size:15px;padding:8px 6px;cursor:pointer}
+
+/* card tiles */
+.sum{margin:26px 2px 12px;font-size:15px;color:var(--mut)}
+.sum b{color:var(--ink);font-weight:650}
+.list{display:grid;gap:10px}
+.tile{position:relative;background:var(--surface);border-radius:10px;padding:17px 18px 12px;box-shadow:0 0 0 1px var(--line)}
+.tile::before{content:"";position:absolute;inset:5px;border:1px solid var(--tile-line);border-radius:6px;pointer-events:none}
+.nl{position:relative;margin:0;font:400 18px/1.45 var(--read);font-optical-sizing:auto}
+.nl mark{background:var(--delft-soft);color:var(--delft-ink);font-weight:600;border-radius:5px;padding:0 .22em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.tr{position:relative;margin:6px 0 0;color:var(--mut);font-size:15px}
+.foot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;min-height:36px}
+.st{font-size:13.5px;color:var(--mut);display:inline-flex;align-items:center;gap:6px}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.8}
 .st.ok{color:var(--ok)}.st.err{color:var(--err)}
-.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
-.bar>div{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
-.bar .link{white-space:nowrap}
+.mini{font-size:14px;font-weight:600;color:var(--delft-ink);text-decoration:none;padding:7px 12px;border-radius:10px;border:1px solid var(--line)}
+.tile.sent .nl,.tile.sent .tr{opacity:.5}
+.tile.bad::before{border-style:dashed;border-color:var(--err);opacity:.6}
+.tile.bad .nl{font:14px/1.5 -apple-system,system-ui,sans-serif;color:var(--mut);word-break:break-word}
+
+/* bottom dock */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:22px 20px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--bg) 62%,transparent)}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;max-width:560px;margin:0 auto;min-height:58px;border-radius:18px;
+  background:var(--oranje);color:var(--oranje-ink);font-size:18px;font-weight:720;text-decoration:none;letter-spacing:-.005em;
+  box-shadow:0 12px 26px -14px rgba(204,79,5,.9)}
+.cta svg{width:20px;height:20px}
+.cta.off{background:var(--line);color:var(--mut);box-shadow:none;pointer-events:none}
+
+/* settings sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,10,30,.45);opacity:0;transition:opacity .25s}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--surface);border-radius:24px 24px 0 0;
+  padding:10px 20px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}
+.sheet-in{max-width:560px;margin:0 auto}
+.open .scrim{opacity:1}.open .sheet{transform:none}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sheet h2{margin:0;font-size:21px;font-weight:720;letter-spacing:-.01em}
+.sheet h3{margin:22px 0 10px;font-size:15px;font-weight:650}
+.f{margin-bottom:12px}
+.f label{display:block;font-size:13.5px;color:var(--mut);margin:0 0 5px}
+.f .input{background:var(--bg)}
+.two{display:flex;gap:10px}.two>.f{flex:1;min-width:0}
+.dk{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.dk span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dk button{flex:none;white-space:nowrap;border:0;background:none;color:var(--err);font-size:14px;cursor:pointer;padding:6px}
+.dk button:disabled{color:var(--mut);opacity:.5}
+.wide{width:100%;margin-top:4px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;background:var(--bg);border:1px solid var(--line);border-radius:14px}
+.seg button{border:0;background:transparent;border-radius:10px;min-height:40px;font-size:15px;font-weight:600;color:var(--mut);cursor:pointer}
+.seg button.on{background:var(--delft);color:#fff}
+@media (prefers-color-scheme:dark){.seg button.on{color:#0A1330}}
+.ver{margin:20px 0 0;font-size:12.5px;color:var(--mut);text-align:center}
+
+/* toast */
+.toast{position:fixed;left:20px;right:20px;bottom:calc(100px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;
+  background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 16px;font-size:15px;opacity:0;transform:translateY(8px);
+  transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.sheet,.scrim,.toast{transition:none}}
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v5</span></h1>
-    <button class="link" id="gear" type="button">Ayarlar</button>
-  </header>
 
-  <section class="panel" id="panel" hidden>
-    <div class="field">
-      <label for="type">Not tipi</label>
-      <input id="type" autocomplete="off" autocapitalize="off">
+<header class="top">
+  <div class="tiles" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="delft" width="64" height="64" patternUnits="userSpaceOnUse">
+          <g fill="none" stroke="currentColor" stroke-width="1.4">
+            <rect x=".5" y=".5" width="63" height="63"/>
+            <path d="M.5 13A12.5 12.5 0 0 0 13 .5M51 .5A12.5 12.5 0 0 0 63.5 13M63.5 51A12.5 12.5 0 0 0 51 63.5M13 63.5A12.5 12.5 0 0 0 .5 51"/>
+            <path d="M.5 7A6.5 6.5 0 0 0 7 .5M57 .5A6.5 6.5 0 0 0 63.5 7M63.5 57A6.5 6.5 0 0 0 57 63.5M7 63.5A6.5 6.5 0 0 0 .5 57"/>
+          </g>
+          <g fill="currentColor">
+            <ellipse cx="32" cy="23.5" rx="3.6" ry="7"/>
+            <ellipse cx="32" cy="40.5" rx="3.6" ry="7"/>
+            <ellipse cx="23.5" cy="32" rx="7" ry="3.6"/>
+            <ellipse cx="40.5" cy="32" rx="7" ry="3.6"/>
+          </g>
+          <circle cx="32" cy="32" r="2.6" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#delft)"/>
+    </svg>
+  </div>
+  <div class="head">
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+      <rect width="48" height="48" rx="12" fill="#1E3F9C"/>
+      <rect x="9" y="9" width="30" height="30" rx="5" fill="#F4F6FB"/>
+      <rect x="12.5" y="12.5" width="23" height="23" rx="3" fill="none" stroke="#1E3F9C" stroke-width="1.3"/>
+      <circle cx="24" cy="24" r="6.4" fill="#E8641A"/>
+      <path d="M24 20.4v7.2M20.4 24h7.2" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <h1 data-i18n="title">Anki'ye ekle</h1>
+      <p class="sub" data-i18n="sub">Hollandaca kartlar</p>
     </div>
-    <div class="two field">
-      <div><label for="f1">Ön alan</label><input id="f1" autocomplete="off" autocapitalize="off"></div>
-      <div><label for="f2">Arka alan</label><input id="f2" autocomplete="off" autocapitalize="off"></div>
-    </div>
-    <div class="field">
-      <label for="sc_name">Kısayol adı</label>
-      <input id="sc_name" autocomplete="off" autocapitalize="off">
-    </div>
-    <div class="field">
-      <label for="tags">Etiket (isteğe bağlı)</label>
-      <input id="tags" autocomplete="off" autocapitalize="off">
+    <button class="icon-btn" id="gear" type="button" aria-label="Ayarlar" data-i18n-aria="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2 class="lbl" data-i18n="deck">Deste</h2>
+    <div class="chips" id="chips"></div>
+    <div class="newdeck" id="newrow" hidden>
+      <div class="row">
+        <input class="input" id="newname" placeholder="Deste adı, örn. Günlük" data-i18n-ph="deckPh" autocomplete="off">
+        <button class="btn" id="newok" type="button" data-i18n="add">Ekle</button>
+        <button class="btn quiet" id="newno" type="button" data-i18n="cancel">Vazgeç</button>
+      </div>
+      <p class="note" data-i18n="deckNote">Desteyi önce Anki'de aynı adla oluştur. Alt deste için Ana::Alt yaz.</p>
     </div>
   </section>
 
-  <div class="field">
-    <label for="deck">Deste</label>
-    <select id="deck"></select>
-    <div class="inline" id="newrow" hidden>
-      <input id="newname" placeholder="Yeni deste adı" autocomplete="off">
-      <button class="btn small" id="newok" type="button">Kullan</button>
-      <button class="btn small ghost" id="newno" type="button">Vazgeç</button>
+  <div class="paste">
+    <textarea id="txt" spellcheck="false" aria-label="Kartlar" data-i18n-aria="cards" data-i18n-ph="pastePh" placeholder="ChatGPT'nin verdiği kod bloğunu buraya yapıştır. Her satır bir kart olur."></textarea>
+    <div class="paste-bar">
+      <button class="pbtn" id="pastebtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2.5"/><path d="M9 4.5V3.5h6v1M9.5 11h5M9.5 15h5"/></svg>
+        <span data-i18n="paste">Yapıştır</span>
+      </button>
+      <button class="tbtn" id="clear" type="button" data-i18n="clear">Temizle</button>
     </div>
-    <p class="hint" id="deckhint">Deste Anki'de önceden oluşturulmuş olmalı, Anki kendiliğinden oluşturmuyor. Liste sadece bu sayfada tutulur. Alt deste: Ana::Alt</p>
-    <button class="link" id="rmdeck" type="button">Bu desteyi listeden kaldır</button>
   </div>
 
-  <div class="field">
-    <label for="txt">Kartlar</label>
-    <textarea id="txt" spellcheck="false" placeholder="Her satır bir kart. ChatGPT'nin verdiği satırları yapıştır."></textarea>
-  </div>
-
-  <div class="sum" id="sum"></div>
-  <a class="btn ghost" id="sc" href="#" hidden>Hepsini Anki'ye aktar</a>
-  <button class="link" id="dl" type="button" hidden style="margin-top:6px">Kısayol yoksa: dosya olarak indir (.csv)</button>
-  <p class="hint" id="bulkhint" hidden>Tüm kartlar Kısayollar üzerinden tek seferde Anki'nin içe aktarma ekranına gider, orada onaylarsın.</p>
-  <div id="list"></div>
+  <p class="sum" id="sum"></p>
+  <div class="list" id="list"></div>
 </main>
 
-<div class="bar"><div>
-  <button class="link" id="clear" type="button">Temizle</button>
-  <a class="btn" id="next" href="#" aria-disabled="true">Anki'ye gönder</a>
-</div></div>
+<div class="dock">
+  <a class="cta off" id="sc" href="#" aria-disabled="true"></a>
+</div>
+
+<div id="sheetwrap" hidden>
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheettitle">
+    <div class="sheet-in">
+      <div class="grab"></div>
+      <div class="sheet-h">
+        <h2 id="sheettitle" data-i18n="settings">Ayarlar</h2>
+        <button class="btn" id="done" type="button" data-i18n="done">Bitti</button>
+      </div>
+
+      <h3 data-i18n="language">Dil</h3>
+      <div class="seg" id="langs" role="group">
+        <button type="button" data-lang="tr" lang="tr">Türkçe</button>
+        <button type="button" data-lang="nl" lang="nl">Nederlands</button>
+        <button type="button" data-lang="en" lang="en">English</button>
+      </div>
+
+      <h3 data-i18n="noteTypeH">Anki not tipi</h3>
+      <div class="f"><label for="type" data-i18n="noteType">Not tipi</label><input class="input" id="type" autocomplete="off" autocapitalize="off"></div>
+      <div class="two">
+        <div class="f"><label for="f1" data-i18n="front">Ön alan</label><input class="input" id="f1" autocomplete="off" autocapitalize="off"></div>
+        <div class="f"><label for="f2" data-i18n="back">Arka alan</label><input class="input" id="f2" autocomplete="off" autocapitalize="off"></div>
+      </div>
+      <div class="f"><label for="tags" data-i18n="tag">Etiket, isteğe bağlı</label><input class="input" id="tags" autocomplete="off" autocapitalize="off"></div>
+
+      <h3 data-i18n="bulkH">Toplu aktarma</h3>
+      <div class="f"><label for="sc_name" data-i18n="scName">Kısayol adı</label><input class="input" id="sc_name" autocomplete="off" autocapitalize="off"></div>
+      <button class="btn quiet wide" id="dl" type="button" data-i18n="download">Kartları dosya olarak indir (.csv)</button>
+
+      <h3 data-i18n="decks">Desteler</h3>
+      <div id="deckadmin"></div>
+
+      <p class="ver" data-i18n="version">Sürüm 7</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ==PARSER==
@@ -134,13 +280,13 @@ function splitCard(line){
     var k=s.indexOf(',',ci);
     if(k>0){front=s.slice(0,k);back=s.slice(k+1);}
   }
-  if(front===null) return {raw:s,error:'Ön ve arka yüz ayrılamadı'};
+  if(front===null) return {raw:s,error:'split'};
   front=front.trim();
   if(/^["“]/.test(front)&&/["”]$/.test(front)) front=front.replace(/^["“]+/,'').replace(/["”]+$/,'').trim();
   back=back.replace(/["“”]/g,'').trim().replace(/,(?=\S)/,', ');
   var hasCloze=/\{\{c\d+::/.test(front);
   return {raw:s,front:front,back:back,hasCloze:hasCloze,
-    error:!front?'Ön yüz boş':(!hasCloze?'Cümlede {{c1::...}} yok':null)};
+    error:!front?'empty':(!hasCloze?'nocloze':null)};
 }
 function parseAll(text){
   return text.split(/\r?\n/).map(splitCard).filter(Boolean);
@@ -167,6 +313,50 @@ function bulkText(cfg,cards){
 }
 // ==END==
 
+var I18N={
+ tr:{doc:"Anki'ye ekle",title:"Anki'ye ekle",sub:"Hollandaca kartlar",settings:"Ayarlar",deck:"Deste",newDeck:"+ Yeni deste",
+  deckPh:"Deste adı, örn. Günlük",add:"Ekle",cancel:"Vazgeç",deckNote:"Desteyi önce Anki'de aynı adla oluştur. Alt deste için Ana::Alt yaz.",
+  cards:"Kartlar",pastePh:"ChatGPT'nin verdiği kod bloğunu buraya yapıştır. Her satır bir kart olur.",paste:"Yapıştır",clear:"Temizle",
+  ctaOff:"Önce kartları yapıştır",cta1:"Kartı Anki'ye aktar",ctaN:"{n} kartı Anki'ye aktar",again:"Tekrar aktar",
+  toastGo:"Kısayol açılıyor. Anki'de içe aktarmayı onayla.",toastEmpty:"Panoda metin yok. ChatGPT'den kod bloğunu kopyala.",
+  ready1:"1 kart hazır",readyN:"{n} kart hazır",bad1:"1 satır okunamadı",badN:"{n} satır okunamadı",sent1:"1 gönderildi",sentN:"{n} gönderildi",target:"Hedef deste",
+  stReady:"Hazır",stSent:"Gönderildi",single:"Tek gönder",
+  err_split:"Ön ve arka yüz ayrılamadı",err_empty:"Ön yüz boş",err_nocloze:"Cümlede {{c1::...}} yok",
+  done:"Bitti",language:"Dil",noteTypeH:"Anki not tipi",noteType:"Not tipi",front:"Ön alan",back:"Arka alan",tag:"Etiket, isteğe bağlı",
+  bulkH:"Toplu aktarma",scName:"Kısayol adı",download:"Kartları dosya olarak indir (.csv)",decks:"Desteler",remove:"Kaldır",version:"Sürüm 7"},
+ nl:{doc:"Naar Anki",title:"Naar Anki",sub:"Nederlandse kaarten",settings:"Instellingen",deck:"Stapel",newDeck:"+ Nieuwe stapel",
+  deckPh:"Naam van de stapel, bijv. Dagelijks",add:"Toevoegen",cancel:"Annuleren",deckNote:"Maak de stapel eerst met dezelfde naam aan in Anki. Voor een substapel schrijf je Hoofd::Sub.",
+  cards:"Kaarten",pastePh:"Plak hier het codeblok van ChatGPT. Elke regel wordt een kaart.",paste:"Plakken",clear:"Wissen",
+  ctaOff:"Plak eerst je kaarten",cta1:"Kaart importeren in Anki",ctaN:"{n} kaarten importeren in Anki",again:"Opnieuw importeren",
+  toastGo:"Opdracht wordt geopend. Bevestig het importeren in Anki.",toastEmpty:"Er staat geen tekst op het klembord. Kopieer het codeblok uit ChatGPT.",
+  ready1:"1 kaart klaar",readyN:"{n} kaarten klaar",bad1:"1 regel onleesbaar",badN:"{n} regels onleesbaar",sent1:"1 verzonden",sentN:"{n} verzonden",target:"Doelstapel",
+  stReady:"Klaar",stSent:"Verzonden",single:"Los verzenden",
+  err_split:"Voor- en achterkant niet te scheiden",err_empty:"Voorkant is leeg",err_nocloze:"Geen {{c1::...}} in de zin",
+  done:"Gereed",language:"Taal",noteTypeH:"Anki-notitietype",noteType:"Notitietype",front:"Voorveld",back:"Achterveld",tag:"Label, optioneel",
+  bulkH:"Alles tegelijk importeren",scName:"Naam van de opdracht",download:"Kaarten downloaden als bestand (.csv)",decks:"Stapels",remove:"Verwijderen",version:"Versie 7"},
+ en:{doc:"Add to Anki",title:"Add to Anki",sub:"Dutch cards",settings:"Settings",deck:"Deck",newDeck:"+ New deck",
+  deckPh:"Deck name, e.g. Daily",add:"Add",cancel:"Cancel",deckNote:"Create the deck in Anki first, with the same name. For a subdeck, write Parent::Child.",
+  cards:"Cards",pastePh:"Paste the code block from ChatGPT here. Each line becomes a card.",paste:"Paste",clear:"Clear",
+  ctaOff:"Paste your cards first",cta1:"Import card to Anki",ctaN:"Import {n} cards to Anki",again:"Import again",
+  toastGo:"Opening Shortcuts. Confirm the import in Anki.",toastEmpty:"No text on the clipboard. Copy the code block from ChatGPT.",
+  ready1:"1 card ready",readyN:"{n} cards ready",bad1:"1 line unreadable",badN:"{n} lines unreadable",sent1:"1 sent",sentN:"{n} sent",target:"Target deck",
+  stReady:"Ready",stSent:"Sent",single:"Send one",
+  err_split:"Couldn't split front and back",err_empty:"Front is empty",err_nocloze:"No {{c1::...}} in the sentence",
+  done:"Done",language:"Language",noteTypeH:"Anki note type",noteType:"Note type",front:"Front field",back:"Back field",tag:"Tag, optional",
+  bulkH:"Bulk import",scName:"Shortcut name",download:"Download cards as a file (.csv)",decks:"Decks",remove:"Remove",version:"Version 7"}
+};
+var lang='tr';
+function t(key,n){var d=I18N[lang]||I18N.tr;var v=(key in d)?d[key]:I18N.tr[key];return n==null?v:v.replace('{n}',n);}
+function tn(one,many,n){return n===1?t(one):t(many,n);}
+function applyLang(){
+  document.documentElement.lang=lang;document.title=t('doc');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'),function(el){el.textContent=t(el.getAttribute('data-i18n'));});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-ph]'),function(el){el.setAttribute('placeholder',t(el.getAttribute('data-i18n-ph')));});
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n-aria]'),function(el){el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')));});
+  Array.prototype.forEach.call(document.querySelectorAll('#langs button'),function(b){
+    var on=b.getAttribute('data-lang')===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
+}
+
 var KEY='anki-ekle-v1';
 var cfg={deck:'Kendi cümlelerim link üzeri notlardan',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:'',sc_name:'Anki Aktar'};
 var draft={text:'',sent:[]};
@@ -174,106 +364,163 @@ try{var s1=JSON.parse(localStorage.getItem(KEY+'-cfg')||'null');if(s1)for(var k 
 try{var s2=JSON.parse(localStorage.getItem(KEY+'-draft')||'null');if(s2){draft.text=s2.text||'';draft.sent=s2.sent||[];}}catch(e){}
 if(!Array.isArray(cfg.decks))cfg.decks=[];
 if(!cfg.sc_name)cfg.sc_name='Anki Aktar';
+lang=I18N[cfg.lang]?cfg.lang:'tr';
+if(!cfg.deck)cfg.deck='Günlük';
 if(cfg.decks.indexOf(cfg.deck)<0)cfg.decks.unshift(cfg.deck);
 function saveCfg(){try{localStorage.setItem(KEY+'-cfg',JSON.stringify(cfg));}catch(e){}}
 function saveDraft(){try{localStorage.setItem(KEY+'-draft',JSON.stringify(draft));}catch(e){}}
 
 var $=function(id){return document.getElementById(id);};
+var toastTimer;
+function toast(msg){
+  var t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show');},3200);
+}
 
+/* settings sheet */
+function openSheet(){var w=$('sheetwrap');w.hidden=false;requestAnimationFrame(function(){requestAnimationFrame(function(){w.classList.add('open');});});}
+function closeSheet(){var w=$('sheetwrap');w.classList.remove('open');setTimeout(function(){w.hidden=true;},280);}
+$('gear').addEventListener('click',openSheet);
+$('done').addEventListener('click',closeSheet);
+$('scrim').addEventListener('click',closeSheet);
 ['type','f1','f2','tags','sc_name'].forEach(function(id){
   $(id).value=cfg[id];
   $(id).addEventListener('input',function(){cfg[id]=$(id).value;saveCfg();render();});
 });
-$('gear').addEventListener('click',function(){var p=$('panel');p.hidden=!p.hidden;});
 
-function buildDecks(){
-  var sel=$('deck');sel.innerHTML='';
+/* decks */
+function renderChips(){
+  var box=$('chips');box.innerHTML='';
   cfg.decks.forEach(function(d){
-    var o=document.createElement('option');o.value=d;o.textContent=d;
-    if(d===cfg.deck)o.selected=true;sel.appendChild(o);
+    var b=document.createElement('button');
+    b.type='button';b.className='chip'+(d===cfg.deck?' on':'');b.textContent=d;
+    b.setAttribute('aria-pressed',d===cfg.deck?'true':'false');
+    b.addEventListener('click',function(){cfg.deck=d;saveCfg();renderChips();render();});
+    box.appendChild(b);
   });
-  var n=document.createElement('option');n.value='__new__';n.textContent='+ Yeni deste…';sel.appendChild(n);
-  $('rmdeck').hidden=cfg.decks.length<2;
+  var add=document.createElement('button');
+  add.type='button';add.className='chip add';add.textContent=t('newDeck');
+  add.addEventListener('click',function(){$('newrow').hidden=false;$('newname').focus();});
+  box.appendChild(add);
+  renderDeckAdmin();
 }
-$('deck').addEventListener('change',function(){
-  if($('deck').value==='__new__'){$('newrow').hidden=false;$('newname').focus();}
-  else{cfg.deck=$('deck').value;$('newrow').hidden=true;saveCfg();render();}
-});
+function renderDeckAdmin(){
+  var box=$('deckadmin');box.innerHTML='';
+  cfg.decks.forEach(function(d){
+    var row=document.createElement('div');row.className='dk';
+    var n=document.createElement('span');n.textContent=d;row.appendChild(n);
+    var rm=document.createElement('button');rm.type='button';rm.textContent=t('remove');
+    rm.disabled=cfg.decks.length<2;
+    rm.addEventListener('click',function(){
+      cfg.decks=cfg.decks.filter(function(x){return x!==d;});
+      if(cfg.deck===d)cfg.deck=cfg.decks[0];
+      saveCfg();renderChips();render();
+    });
+    row.appendChild(rm);box.appendChild(row);
+  });
+}
+function closeNew(){$('newname').value='';$('newrow').hidden=true;}
 $('newok').addEventListener('click',function(){
   var n=$('newname').value.trim().replace(/\s*::\s*/g,'::');
-  if(!n)return;
+  if(!n){$('newname').focus();return;}
   if(cfg.decks.indexOf(n)<0)cfg.decks.push(n);
-  cfg.deck=n;$('newname').value='';$('newrow').hidden=true;
-  saveCfg();buildDecks();render();
+  cfg.deck=n;closeNew();saveCfg();renderChips();render();
 });
-$('newno').addEventListener('click',function(){$('newname').value='';$('newrow').hidden=true;buildDecks();});
-$('rmdeck').addEventListener('click',function(){
-  cfg.decks=cfg.decks.filter(function(d){return d!==cfg.deck;});
-  cfg.deck=cfg.decks[0];saveCfg();buildDecks();render();
-});
+$('newname').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('newok').click();}});
+$('newno').addEventListener('click',closeNew);
 
+/* text input */
+function setText(v){$('txt').value=v;draft.text=v;draft.sent=[];saveDraft();render();}
 $('txt').value=draft.text;
 $('txt').addEventListener('input',function(){draft.text=$('txt').value;draft.sent=[];saveDraft();render();});
-$('clear').addEventListener('click',function(){draft={text:'',sent:[]};$('txt').value='';saveDraft();render();});
+$('clear').addEventListener('click',function(){setText('');});
+$('pastebtn').addEventListener('click',function(){
+  if(!(navigator.clipboard&&navigator.clipboard.readText)){$('txt').focus();return;}
+  navigator.clipboard.readText().then(function(t){
+    if(!t){toast(t('toastEmpty'));return;}
+    var cur=$('txt').value;
+    setText(cur?cur.replace(/\s*$/,'')+'\n'+t:t);
+  }).catch(function(){$('txt').focus();});
+});
 
+/* export */
+function downloadBulk(){
+  var text=bulkText(cfg,parseAll(draft.text));
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));
+  a.download='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
+}
+$('dl').addEventListener('click',downloadBulk);
+
+var okIdx=[];
+$('sc').addEventListener('click',function(e){
+  if($('sc').classList.contains('off')){e.preventDefault();return;}
+  var all=okIdx.slice();
+  setTimeout(function(){draft.sent=all;saveDraft();render();},400);
+  toast(t('toastGo'));
+});
 function markSent(i){
   if(draft.sent.indexOf(i)<0)draft.sent.push(i);
-  saveDraft();
-  setTimeout(render,400);
+  saveDraft();setTimeout(render,400);
 }
+
+var SEND_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h12M13 6l6 6-6 6"/></svg>';
 
 function render(){
   var cards=parseAll(draft.text);
   var list=$('list');list.innerHTML='';
-  var ok=0,bad=0,done=0,nextIdx=-1;
+  var ok=0,bad=0,done=0;okIdx=[];
   cards.forEach(function(c,i){
-    var el=document.createElement('div');
+    var el=document.createElement('article');
     var isSent=draft.sent.indexOf(i)>=0;
-    el.className='card'+(isSent?' sent':'');
-    var fr=c.front?esc(c.front).replace(/\{\{c\d+::([\s\S]*?)(?:::[\s\S]*?)?\}\}/g,'<mark>$1</mark>'):esc(c.raw);
-    var html='<p class="front">'+fr+'</p>'+(c.back?'<p class="back">'+esc(c.back)+'</p>':'');
-    var meta='<div class="meta">';
-    if(c.error){bad++;meta+='<span class="st err">'+esc(c.error)+'</span>';}
-    else{
-      ok++;
-      if(isSent){done++;meta+='<span class="st ok">Gönderildi</span>';}
-      else{meta+='<span class="st">Bekliyor</span>';if(nextIdx<0)nextIdx=i;}
-      meta+='<a class="btn small ghost" data-i="'+i+'" href="'+ankiUrl(cfg,c).replace(/&/g,'&amp;')+'">'+(isSent?'Tekrar':'Gönder')+'</a>';
+    var html,foot;
+    if(c.error){
+      bad++;el.className='tile bad';
+      html='<p class="nl">'+esc(c.raw)+'</p>';
+      foot='<span class="st err">'+esc(t('err_'+c.error))+'</span>';
+    }else{
+      ok++;okIdx.push(i);if(isSent)done++;
+      el.className='tile'+(isSent?' sent':'');
+      var fr=esc(c.front).replace(/\{\{c\d+::([\s\S]*?)(?:::[\s\S]*?)?\}\}/g,'<mark>$1</mark>');
+      html='<p class="nl">'+fr+'</p>'+(c.back?'<p class="tr">'+esc(c.back)+'</p>':'');
+      foot=(isSent?'<span class="st ok">'+t('stSent')+'</span>':'<span class="st">'+t('stReady')+'</span>')
+        +'<a class="mini" data-i="'+i+'" href="'+ankiUrl(cfg,c).replace(/&/g,'&amp;')+'">'+t('single')+'</a>';
     }
-    el.innerHTML=html+meta+'</div>';
+    el.innerHTML=html+'<div class="foot">'+foot+'</div>';
     list.appendChild(el);
   });
   Array.prototype.forEach.call(list.querySelectorAll('a[data-i]'),function(a){
     a.addEventListener('click',function(){markSent(parseInt(a.getAttribute('data-i'),10));});
   });
-  $('sum').textContent=cards.length?(ok+' kart'+(bad?' · '+bad+' sorunlu satır':'')+' · '+done+' gönderildi'):'';
-  $('sc').hidden=ok<1;$('dl').hidden=ok<1;$('bulkhint').hidden=ok<1;
-  if(ok>0){$('sc').setAttribute('href','shortcuts://run-shortcut?name='+enc(cfg.sc_name.trim()||'Anki Aktar')+'&input=text&text='+enc(bulkText(cfg,cards)));}
-  var nx=$('next');
-  if(nextIdx>=0){
-    nx.setAttribute('href',ankiUrl(cfg,cards[nextIdx]));
-    nx.setAttribute('aria-disabled','false');
-    nx.textContent='Anki\'ye gönder ('+(done+1)+'/'+ok+')';
-    nx.onclick=function(){markSent(nextIdx);};
-  }else{
-    nx.setAttribute('href','#');
-    nx.setAttribute('aria-disabled','true');
-    nx.textContent=ok&&done===ok?'Hepsi gönderildi':'Anki\'ye gönder';
-    nx.onclick=function(e){e.preventDefault();};
+
+  var sum='';
+  if(cards.length){
+    sum='<b>'+tn('ready1','readyN',ok)+'</b>';
+    if(bad) sum+=', '+tn('bad1','badN',bad);
+    if(done) sum+=', '+tn('sent1','sentN',done);
+    sum+='. '+t('target')+': '+esc(cfg.deck);
   }
+  $('sum').innerHTML=sum;
+
+  var sc=$('sc');
+  if(ok){
+    sc.classList.remove('off');sc.removeAttribute('aria-disabled');
+    sc.setAttribute('href','shortcuts://run-shortcut?name='+enc(cfg.sc_name.trim()||'Anki Aktar')+'&input=text&text='+enc(bulkText(cfg,cards)));
+    sc.innerHTML=esc(done===ok?t('again'):tn('cta1','ctaN',ok))+SEND_ICON;
+  }else{
+    sc.classList.add('off');sc.setAttribute('aria-disabled','true');sc.setAttribute('href','#');
+    sc.textContent=t('ctaOff');
+  }
+  $('dl').disabled=!ok;
 }
-function makeBulk(){
-  return {text:bulkText(cfg,parseAll(draft.text)),
-          name:'anki-kartlar-'+new Date().toISOString().slice(0,10)+'.csv'};
-}
-function downloadBulk(b){
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([b.text],{type:'text/csv;charset=utf-8'}));
-  a.download=b.name;document.body.appendChild(a);a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
-}
-$('dl').addEventListener('click',function(){downloadBulk(makeBulk());});
-buildDecks();
+
+Array.prototype.forEach.call(document.querySelectorAll('#langs button'),function(b){
+  b.addEventListener('click',function(){lang=b.getAttribute('data-lang');cfg.lang=lang;saveCfg();applyLang();renderChips();render();});
+});
+applyLang();
+renderChips();
 render();
 </script>
 </body>
