@@ -257,15 +257,15 @@ function render(){
 }
 $('bulk').addEventListener('click',function(){
   var text=bulkText(cfg,parseAll(draft.text));
-  var name='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.txt';
+  var name='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.tsv';
   var file=null;
-  try{file=new File([text],name,{type:'text/plain'});}catch(e){}
+  try{file=new File([text],name,{type:'text/tab-separated-values'});}catch(e){}
   if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
     navigator.share({files:[file]}).catch(function(){});
     return;
   }
   var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/tab-separated-values;charset=utf-8'}));
   a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
 });
