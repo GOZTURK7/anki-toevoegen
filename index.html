@@ -54,7 +54,7 @@ mark{background:none;color:var(--acc);font-weight:600}
 <body>
 <main>
   <header>
-    <h1>Anki'ye ekle</h1>
+    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v3</span></h1>
     <button class="link" id="gear" type="button">Ayarlar</button>
   </header>
 
@@ -257,15 +257,15 @@ function render(){
 }
 $('bulk').addEventListener('click',function(){
   var text=bulkText(cfg,parseAll(draft.text));
-  var name='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.tsv';
+  var name='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.csv';
   var file=null;
-  try{file=new File([text],name,{type:'text/tab-separated-values'});}catch(e){}
+  try{file=new File([text],name,{type:'text/csv'});}catch(e){}
   if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
     navigator.share({files:[file]}).catch(function(){});
     return;
   }
   var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([text],{type:'text/tab-separated-values;charset=utf-8'}));
+  a.href=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));
   a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
 });
