@@ -54,7 +54,7 @@ mark{background:none;color:var(--acc);font-weight:600}
 <body>
 <main>
   <header>
-    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v4</span></h1>
+    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v5</span></h1>
     <button class="link" id="gear" type="button">Ayarlar</button>
   </header>
 
@@ -66,6 +66,10 @@ mark{background:none;color:var(--acc);font-weight:600}
     <div class="two field">
       <div><label for="f1">Ön alan</label><input id="f1" autocomplete="off" autocapitalize="off"></div>
       <div><label for="f2">Arka alan</label><input id="f2" autocomplete="off" autocapitalize="off"></div>
+    </div>
+    <div class="field">
+      <label for="sc_name">Kısayol adı</label>
+      <input id="sc_name" autocomplete="off" autocapitalize="off">
     </div>
     <div class="field">
       <label for="tags">Etiket (isteğe bağlı)</label>
@@ -91,9 +95,9 @@ mark{background:none;color:var(--acc);font-weight:600}
   </div>
 
   <div class="sum" id="sum"></div>
-  <button class="btn ghost" id="bulk" type="button" hidden>Hepsini tek seferde aktar</button>
-  <button class="btn ghost" id="dl" type="button" hidden style="margin-top:8px">Dosya olarak indir (.csv)</button>
-  <p class="hint" id="bulkhint" hidden>Paylaş menüsünde Anki görünmezse dosyayı indir, Dosyalar'dan açıp Anki'ye ver. İçe aktarma ekranında onaylaman yeter.</p>
+  <a class="btn ghost" id="sc" href="#" hidden>Hepsini Anki'ye aktar</a>
+  <button class="link" id="dl" type="button" hidden style="margin-top:6px">Kısayol yoksa: dosya olarak indir (.csv)</button>
+  <p class="hint" id="bulkhint" hidden>Tüm kartlar Kısayollar üzerinden tek seferde Anki'nin içe aktarma ekranına gider, orada onaylarsın.</p>
   <div id="list"></div>
 </main>
 
@@ -164,18 +168,19 @@ function bulkText(cfg,cards){
 // ==END==
 
 var KEY='anki-ekle-v1';
-var cfg={deck:'Kendi cümlelerim link üzeri notlardan',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:''};
+var cfg={deck:'Kendi cümlelerim link üzeri notlardan',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:'',sc_name:'Anki Aktar'};
 var draft={text:'',sent:[]};
 try{var s1=JSON.parse(localStorage.getItem(KEY+'-cfg')||'null');if(s1)for(var k in s1)cfg[k]=s1[k];}catch(e){}
 try{var s2=JSON.parse(localStorage.getItem(KEY+'-draft')||'null');if(s2){draft.text=s2.text||'';draft.sent=s2.sent||[];}}catch(e){}
 if(!Array.isArray(cfg.decks))cfg.decks=[];
+if(!cfg.sc_name)cfg.sc_name='Anki Aktar';
 if(cfg.decks.indexOf(cfg.deck)<0)cfg.decks.unshift(cfg.deck);
 function saveCfg(){try{localStorage.setItem(KEY+'-cfg',JSON.stringify(cfg));}catch(e){}}
 function saveDraft(){try{localStorage.setItem(KEY+'-draft',JSON.stringify(draft));}catch(e){}}
 
 var $=function(id){return document.getElementById(id);};
 
-['type','f1','f2','tags'].forEach(function(id){
+['type','f1','f2','tags','sc_name'].forEach(function(id){
   $(id).value=cfg[id];
   $(id).addEventListener('input',function(){cfg[id]=$(id).value;saveCfg();render();});
 });
@@ -242,7 +247,8 @@ function render(){
     a.addEventListener('click',function(){markSent(parseInt(a.getAttribute('data-i'),10));});
   });
   $('sum').textContent=cards.length?(ok+' kart'+(bad?' · '+bad+' sorunlu satır':'')+' · '+done+' gönderildi'):'';
-  $('bulk').hidden=ok<1;$('dl').hidden=ok<1;$('bulkhint').hidden=ok<1;
+  $('sc').hidden=ok<1;$('dl').hidden=ok<1;$('bulkhint').hidden=ok<1;
+  if(ok>0){$('sc').setAttribute('href','shortcuts://run-shortcut?name='+enc(cfg.sc_name.trim()||'Anki Aktar')+'&input=text&text='+enc(bulkText(cfg,cards)));}
   var nx=$('next');
   if(nextIdx>=0){
     nx.setAttribute('href',ankiUrl(cfg,cards[nextIdx]));
@@ -266,13 +272,6 @@ function downloadBulk(b){
   a.download=b.name;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
 }
-$('bulk').addEventListener('click',function(){
-  var b=makeBulk(),file=null;
-  try{file=new File([b.text],b.name,{type:'text/csv'});}catch(e){}
-  if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
-    navigator.share({files:[file]}).catch(function(){});
-  }else{downloadBulk(b);}
-});
 $('dl').addEventListener('click',function(){downloadBulk(makeBulk());});
 buildDecks();
 render();
