@@ -54,7 +54,7 @@ mark{background:none;color:var(--acc);font-weight:600}
 <body>
 <main>
   <header>
-    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v3</span></h1>
+    <h1>Anki'ye ekle <span style="font-size:12px;font-weight:400;color:var(--mut)">v4</span></h1>
     <button class="link" id="gear" type="button">Ayarlar</button>
   </header>
 
@@ -92,7 +92,8 @@ mark{background:none;color:var(--acc);font-weight:600}
 
   <div class="sum" id="sum"></div>
   <button class="btn ghost" id="bulk" type="button" hidden>Hepsini tek seferde aktar</button>
-  <p class="hint" id="bulkhint" hidden>Kartları içeren bir dosya açılır. Paylaş menüsünde Anki'yi seç, açılan içe aktarma ekranında onayla.</p>
+  <button class="btn ghost" id="dl" type="button" hidden style="margin-top:8px">Dosya olarak indir (.csv)</button>
+  <p class="hint" id="bulkhint" hidden>Paylaş menüsünde Anki görünmezse dosyayı indir, Dosyalar'dan açıp Anki'ye ver. İçe aktarma ekranında onaylaman yeter.</p>
   <div id="list"></div>
 </main>
 
@@ -241,7 +242,7 @@ function render(){
     a.addEventListener('click',function(){markSent(parseInt(a.getAttribute('data-i'),10));});
   });
   $('sum').textContent=cards.length?(ok+' kart'+(bad?' · '+bad+' sorunlu satır':'')+' · '+done+' gönderildi'):'';
-  $('bulk').hidden=ok<2;$('bulkhint').hidden=ok<2;
+  $('bulk').hidden=ok<1;$('dl').hidden=ok<1;$('bulkhint').hidden=ok<1;
   var nx=$('next');
   if(nextIdx>=0){
     nx.setAttribute('href',ankiUrl(cfg,cards[nextIdx]));
@@ -255,20 +256,24 @@ function render(){
     nx.onclick=function(e){e.preventDefault();};
   }
 }
+function makeBulk(){
+  return {text:bulkText(cfg,parseAll(draft.text)),
+          name:'anki-kartlar-'+new Date().toISOString().slice(0,10)+'.csv'};
+}
+function downloadBulk(b){
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([b.text],{type:'text/csv;charset=utf-8'}));
+  a.download=b.name;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
+}
 $('bulk').addEventListener('click',function(){
-  var text=bulkText(cfg,parseAll(draft.text));
-  var name='anki-kartlar-'+new Date().toISOString().slice(0,10)+'.csv';
-  var file=null;
-  try{file=new File([text],name,{type:'text/csv'});}catch(e){}
+  var b=makeBulk(),file=null;
+  try{file=new File([b.text],b.name,{type:'text/csv'});}catch(e){}
   if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
     navigator.share({files:[file]}).catch(function(){});
-    return;
-  }
-  var a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([text],{type:'text/csv;charset=utf-8'}));
-  a.download=name;document.body.appendChild(a);a.click();
-  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
+  }else{downloadBulk(b);}
 });
+$('dl').addEventListener('click',function(){downloadBulk(makeBulk());});
 buildDecks();
 render();
 </script>
