@@ -18,14 +18,14 @@
 :root{
   --bg:#F4F6FB;--surface:#FFFFFF;--ink:#121A33;--mut:#5F6A8C;--line:#DCE2F0;
   --delft:#1E3F9C;--delft-ink:#1E3F9C;--delft-soft:#E3E9F8;--tile-line:#CBD6EF;--pattern:.16;
-  --oranje:#CC4F05;--oranje-ink:#FFFFFF;--ok:#1F7A51;--err:#B83434;
+  --oranje:#CC4F05;--oranje-ink:#FFFFFF;--oranje-soft:#FBE3D3;--ok:#1F7A51;--err:#B83434;
   --ui:"Bricolage Grotesque",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   --read:"Literata",Georgia,"Times New Roman",serif;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#0A1330;--surface:#111D45;--ink:#EEF1FA;--mut:#9AA6CC;--line:#22305E;
   --delft:#6C8FF2;--delft-ink:#B3C8FF;--delft-soft:#1D2E68;--tile-line:#27397A;--pattern:.30;
-  --oranje:#FF8A3D;--oranje-ink:#1F0D00;--ok:#5BCB95;--err:#FF8787;
+  --oranje:#FF8A3D;--oranje-ink:#1F0D00;--oranje-soft:#3B2416;--ok:#5BCB95;--err:#FF8787;
 }}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -43,7 +43,8 @@ button,input,textarea{font:inherit;color:inherit}
 .logo{width:46px;height:46px;flex:none;border-radius:13px;box-shadow:0 6px 18px -8px rgba(30,63,156,.6)}
 h1{margin:0;font-size:27px;line-height:1.1;font-weight:760;letter-spacing:-.02em;font-variation-settings:"opsz" 96}
 .sub{margin:2px 0 0;font-size:14px;color:var(--mut)}
-.icon-btn{margin-left:auto;width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
+.head-actions{margin-left:auto;display:flex;gap:8px}
+.icon-btn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer}
 .icon-btn svg{width:22px;height:22px}
 
 main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
@@ -136,6 +137,85 @@ main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
   transition:opacity .2s,transform .2s;pointer-events:none}
 .toast.show{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim,.toast{transition:none}}
+
+/* help view */
+body.in-help .top,body.in-help main,body.in-help .dock{display:none}
+body:not(.in-help) #help{display:none}
+#help{max-width:560px;margin:0 auto;padding:0 20px 70px}
+.help-top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(env(safe-area-inset-top) + 10px) 0 6px}
+.back{display:inline-flex;align-items:center;gap:2px;border:0;background:none;color:var(--delft-ink);font-size:17px;font-weight:600;padding:8px 8px 8px 0;cursor:pointer}
+.back svg{width:22px;height:22px}
+.help-h1{font-size:32px;margin:4px 0 14px}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.jump button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:14px;font-weight:550;cursor:pointer}
+#help section{padding-top:30px;scroll-margin-top:calc(env(safe-area-inset-top) + 56px)}
+#help h2{font-size:23px;font-weight:720;letter-spacing:-.01em;margin:0 0 8px}
+#help h3{font-size:17px;font-weight:680;margin:0 0 4px}
+#help h4{font-size:15px;font-weight:650;margin:16px 0 6px}
+#help p{margin:0 0 12px;line-height:1.55}
+#help .s{display:block;color:var(--mut);font-size:15px;line-height:1.45}
+.cap{color:var(--mut);font-size:14.5px}
+.flow{list-style:none;margin:16px 0 22px;padding:0}
+.flow li{position:relative;display:flex;gap:14px;align-items:flex-start;padding-bottom:18px}
+.flow li:not(:last-child)::after{content:"";position:absolute;left:17px;top:40px;bottom:2px;width:2px;background:var(--tile-line)}
+.fn,.sn{flex:none;width:36px;height:36px;border-radius:11px;background:var(--delft-soft);color:var(--delft-ink);display:grid;place-items:center;font-weight:720;font-size:16px}
+.flow li:last-child .fn{background:var(--oranje);color:var(--oranje-ink)}
+.flow b{display:block;font-weight:680;margin-top:6px}
+.fmt{background:var(--surface);border-radius:14px;box-shadow:0 0 0 1px var(--line);padding:14px;margin-top:10px}
+.line{display:block;font:13.5px/1.7 ui-monospace,Menlo,monospace;word-break:break-word;background:var(--bg);border-radius:10px;padding:10px 12px}
+.seg-f{background:var(--delft-soft);color:var(--delft-ink);border-radius:4px}
+.seg-c{background:var(--oranje);color:var(--oranje-ink);font-weight:800;border-radius:4px;padding:0 3px}
+.seg-b{background:var(--oranje-soft);border-radius:4px}
+.fmt-out{display:grid;gap:8px;margin:10px 0 12px}
+.fo{border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.fo small{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mut);margin-bottom:2px}
+.fo p{margin:0!important}
+.fo .nl{font:400 16px/1.45 var(--read)}
+.dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+.dot.f{background:var(--delft)}.dot.b{background:var(--oranje)}
+.checks{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:8px}
+.checks label{position:relative;display:flex;gap:12px;align-items:flex-start;background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--line);padding:12px 14px;cursor:pointer}
+.checks input{position:absolute;opacity:0;pointer-events:none}
+.box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid var(--tile-line);margin-top:1px;display:grid;place-items:center}
+.checks input:checked+.box{background:var(--ok);border-color:var(--ok)}
+.checks input:checked+.box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translateY(-1px) rotate(45deg)}
+.checks input:focus-visible+.box{outline:2px solid var(--delft);outline-offset:2px}
+.checks b{display:block;font-weight:650}
+.steps{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px}
+.steps>li{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border-radius:14px;box-shadow:0 0 0 1px var(--line);padding:14px}
+.sb{min-width:0;flex:1}
+.sb p:last-child{margin-bottom:0}
+.hbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;background:var(--delft);color:#fff;font-weight:650;font-size:15px;text-decoration:none;border:0;cursor:pointer;margin:2px 8px 2px 0}
+@media (prefers-color-scheme:dark){.hbtn{color:#0A1330}}
+.hbtn.ghost{background:transparent;color:var(--delft-ink);border:1px solid var(--line)}
+.hbtn.sm{min-height:38px;padding:0 12px;font-size:14px;margin:0}
+details.more{margin-top:10px}
+details.more summary{cursor:pointer;color:var(--delft-ink);font-weight:600;padding:6px 0}
+.instr{white-space:pre-wrap;word-break:break-word;font:13px/1.55 ui-monospace,Menlo,monospace;background:var(--bg);border-radius:10px;padding:12px;margin:6px 0 0}
+.where{margin:0;padding-left:18px;color:var(--mut);font-size:14.5px}
+.where li{margin-bottom:6px}
+.sub{margin:8px 0;padding-left:18px;font-size:14.5px}
+.sub li{margin-bottom:6px}
+.map{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:6px 4px;align-items:center;margin:10px 0 12px}
+.map small{font-size:12.5px;color:var(--mut)}
+.mcell{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:46px;display:flex;flex-direction:column;justify-content:center}
+.mcell em{font-style:normal;color:var(--mut);font-size:12px;line-height:1.2}
+.marr{text-align:center;color:var(--oranje);font-weight:800}
+.acts{display:grid;gap:6px;margin:8px 0 10px}
+.act{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:14.5px;line-height:1.7}
+.act em{font-style:normal;color:var(--delft-ink);background:var(--delft-soft);border-radius:6px;padding:1px 6px;font-weight:600}
+.path{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 0}
+.path span{background:var(--delft-soft);color:var(--delft-ink);border-radius:8px;padding:5px 10px;font-size:14px;font-weight:600}
+.path i{color:var(--mut);font-style:normal}
+.tip{background:var(--delft-soft);border-radius:14px;padding:14px;margin:14px 0 10px}
+.trig{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);border-radius:10px;padding:8px 8px 8px 14px}
+.kbd{font:700 15px ui-monospace,Menlo,monospace;color:var(--delft-ink)}
+.faq{background:var(--surface);border-radius:12px;box-shadow:0 0 0 1px var(--line);margin-top:8px}
+.faq summary{list-style:none;cursor:pointer;padding:14px 44px 14px 16px;font-weight:620;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:400;color:var(--mut)}
+.faq[open] summary::after{content:"\2212"}
+#help .faq p{padding:0 16px 14px;margin:0;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -174,9 +254,14 @@ main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
       <h1 data-i18n="title">Anki'ye ekle</h1>
       <p class="sub" data-i18n="sub">Hollandaca kartlar</p>
     </div>
+    <div class="head-actions">
+    <button class="icon-btn" id="helpbtn" type="button" aria-label="Yardım" data-i18n-aria="help">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.6v.4"/><path d="M12 16.9v.1"/></svg>
+    </button>
     <button class="icon-btn" id="gear" type="button" aria-label="Ayarlar" data-i18n-aria="settings">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
     </button>
+    </div>
   </div>
 </header>
 
@@ -186,7 +271,7 @@ main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
     <div class="chips" id="chips"></div>
     <div class="newdeck" id="newrow" hidden>
       <div class="row">
-        <input class="input" id="newname" placeholder="Deste adı, örn. Günlük" data-i18n-ph="deckPh" autocomplete="off">
+        <input class="input" id="newname" placeholder="Deste adı" data-i18n-ph="deckPh" autocomplete="off">
         <button class="btn" id="newok" type="button" data-i18n="add">Ekle</button>
         <button class="btn quiet" id="newno" type="button" data-i18n="cancel">Vazgeç</button>
       </div>
@@ -212,6 +297,8 @@ main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
 <div class="dock">
   <a class="cta off" id="sc" href="#" aria-disabled="true"></a>
 </div>
+
+<div id="help"></div>
 
 <div id="sheetwrap" hidden>
   <div class="scrim" id="scrim"></div>
@@ -245,7 +332,7 @@ main{max-width:560px;margin:0 auto;padding:6px 20px 150px}
       <h3 data-i18n="decks">Desteler</h3>
       <div id="deckadmin"></div>
 
-      <p class="ver" data-i18n="version">Sürüm 7</p>
+      <p class="ver" data-i18n="version">Sürüm 8</p>
     </div>
   </div>
 </div>
@@ -315,7 +402,7 @@ function bulkText(cfg,cards){
 
 var I18N={
  tr:{doc:"Anki'ye ekle",title:"Anki'ye ekle",sub:"Hollandaca kartlar",settings:"Ayarlar",deck:"Deste",newDeck:"+ Yeni deste",
-  deckPh:"Deste adı, örn. Günlük",add:"Ekle",cancel:"Vazgeç",deckNote:"Desteyi önce Anki'de aynı adla oluştur. Alt deste için Ana::Alt yaz.",
+  deckPh:"Deste adı",help:"Yardım",needDeck:"Önce deste ekle",add:"Ekle",cancel:"Vazgeç",deckNote:"Desteyi önce Anki'de aynı adla oluştur. Alt deste için Ana::Alt yaz.",
   cards:"Kartlar",pastePh:"ChatGPT'nin verdiği kod bloğunu buraya yapıştır. Her satır bir kart olur.",paste:"Yapıştır",clear:"Temizle",
   ctaOff:"Önce kartları yapıştır",cta1:"Kartı Anki'ye aktar",ctaN:"{n} kartı Anki'ye aktar",again:"Tekrar aktar",
   toastGo:"Kısayol açılıyor. Anki'de içe aktarmayı onayla.",toastEmpty:"Panoda metin yok. ChatGPT'den kod bloğunu kopyala.",
@@ -323,9 +410,9 @@ var I18N={
   stReady:"Hazır",stSent:"Gönderildi",single:"Tek gönder",
   err_split:"Ön ve arka yüz ayrılamadı",err_empty:"Ön yüz boş",err_nocloze:"Cümlede {{c1::...}} yok",
   done:"Bitti",language:"Dil",noteTypeH:"Anki not tipi",noteType:"Not tipi",front:"Ön alan",back:"Arka alan",tag:"Etiket, isteğe bağlı",
-  bulkH:"Toplu aktarma",scName:"Kısayol adı",download:"Kartları dosya olarak indir (.csv)",decks:"Desteler",remove:"Kaldır",version:"Sürüm 7"},
+  bulkH:"Toplu aktarma",scName:"Kısayol adı",download:"Kartları dosya olarak indir (.csv)",decks:"Desteler",remove:"Kaldır",version:"Sürüm 8"},
  nl:{doc:"Naar Anki",title:"Naar Anki",sub:"Nederlandse kaarten",settings:"Instellingen",deck:"Stapel",newDeck:"+ Nieuwe stapel",
-  deckPh:"Naam van de stapel, bijv. Dagelijks",add:"Toevoegen",cancel:"Annuleren",deckNote:"Maak de stapel eerst met dezelfde naam aan in Anki. Voor een substapel schrijf je Hoofd::Sub.",
+  deckPh:"Naam van de stapel",help:"Hulp",needDeck:"Voeg eerst een stapel toe",add:"Toevoegen",cancel:"Annuleren",deckNote:"Maak de stapel eerst met dezelfde naam aan in Anki. Voor een substapel schrijf je Hoofd::Sub.",
   cards:"Kaarten",pastePh:"Plak hier het codeblok van ChatGPT. Elke regel wordt een kaart.",paste:"Plakken",clear:"Wissen",
   ctaOff:"Plak eerst je kaarten",cta1:"Kaart importeren in Anki",ctaN:"{n} kaarten importeren in Anki",again:"Opnieuw importeren",
   toastGo:"Opdracht wordt geopend. Bevestig het importeren in Anki.",toastEmpty:"Er staat geen tekst op het klembord. Kopieer het codeblok uit ChatGPT.",
@@ -333,9 +420,9 @@ var I18N={
   stReady:"Klaar",stSent:"Verzonden",single:"Los verzenden",
   err_split:"Voor- en achterkant niet te scheiden",err_empty:"Voorkant is leeg",err_nocloze:"Geen {{c1::...}} in de zin",
   done:"Gereed",language:"Taal",noteTypeH:"Anki-notitietype",noteType:"Notitietype",front:"Voorveld",back:"Achterveld",tag:"Label, optioneel",
-  bulkH:"Alles tegelijk importeren",scName:"Naam van de opdracht",download:"Kaarten downloaden als bestand (.csv)",decks:"Stapels",remove:"Verwijderen",version:"Versie 7"},
+  bulkH:"Alles tegelijk importeren",scName:"Naam van de opdracht",download:"Kaarten downloaden als bestand (.csv)",decks:"Stapels",remove:"Verwijderen",version:"Versie 8"},
  en:{doc:"Add to Anki",title:"Add to Anki",sub:"Dutch cards",settings:"Settings",deck:"Deck",newDeck:"+ New deck",
-  deckPh:"Deck name, e.g. Daily",add:"Add",cancel:"Cancel",deckNote:"Create the deck in Anki first, with the same name. For a subdeck, write Parent::Child.",
+  deckPh:"Deck name",help:"Help",needDeck:"Add a deck first",add:"Add",cancel:"Cancel",deckNote:"Create the deck in Anki first, with the same name. For a subdeck, write Parent::Child.",
   cards:"Cards",pastePh:"Paste the code block from ChatGPT here. Each line becomes a card.",paste:"Paste",clear:"Clear",
   ctaOff:"Paste your cards first",cta1:"Import card to Anki",ctaN:"Import {n} cards to Anki",again:"Import again",
   toastGo:"Opening Shortcuts. Confirm the import in Anki.",toastEmpty:"No text on the clipboard. Copy the code block from ChatGPT.",
@@ -343,7 +430,7 @@ var I18N={
   stReady:"Ready",stSent:"Sent",single:"Send one",
   err_split:"Couldn't split front and back",err_empty:"Front is empty",err_nocloze:"No {{c1::...}} in the sentence",
   done:"Done",language:"Language",noteTypeH:"Anki note type",noteType:"Note type",front:"Front field",back:"Back field",tag:"Tag, optional",
-  bulkH:"Bulk import",scName:"Shortcut name",download:"Download cards as a file (.csv)",decks:"Decks",remove:"Remove",version:"Version 7"}
+  bulkH:"Bulk import",scName:"Shortcut name",download:"Download cards as a file (.csv)",decks:"Decks",remove:"Remove",version:"Version 8"}
 };
 var lang='tr';
 function t(key,n){var d=I18N[lang]||I18N.tr;var v=(key in d)?d[key]:I18N.tr[key];return n==null?v:v.replace('{n}',n);}
@@ -357,16 +444,191 @@ function applyLang(){
     var on=b.getAttribute('data-lang')===lang;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false');});
 }
 
+var APPSTORE_URL='https://apps.apple.com/app/id373493387';
+var SHORTCUT_URL='https://www.icloud.com/shortcuts/e1db544308ac43aca03b670e253a05fd';
+var EXAMPLE_FRONT='De docent {{c1::moppert}} omdat de cursisten geen huiswerk hebben.';
+var INSTR={
+ tr:'Bundan sonra her kelime veya ifade açıklamanın en sonunda, ayrı bir kod bloğu içinde Anki kartı satırları ver. Kurallar:\n- Her kart tek satır; bloğun içinde numara, madde işareti veya başka metin olmasın.\n- Format: Hollandaca cümle.,temel hali,"Türkçe anlam (Hollandaca mastar/temel hal)."\n- Cümlede hedef kelime veya ifade tam bir kez {{c1::...}} içinde olsun, cümlede kullanıldığı çekimli haliyle.\n- Cümle nokta, ! veya ? ile bitsin; bu işaret ile virgül arasında boşluk olmasın.\n- Cümleler B1-B2 seviyesinde, günlük hayattan olsun. Kelime başına 3 satır ver.\nNormal açıklamanı yine yaz, kod bloğunu sadece en sona ekle.\n\nBen "ANKI TOPLU" yazarsam: bir önceki "ANKI TOPLU" isteğimden sonra (hiç yazmadıysam sohbetin başından itibaren) sorduğum bütün kelime ve ifadeler için, açıklama yazmadan, tek bir kod bloğu içinde Anki satırları ver. Aynı kelimeyi tekrarlama, kelime başına 2 satır yeter.',
+ nl:'Geef vanaf nu aan het eind van elke uitleg van een woord of uitdrukking Anki-kaartregels in een apart codeblok. Regels:\n- Eén kaart per regel; geen nummers, opsommingstekens of andere tekst in het blok.\n- Formaat: Nederlandse zin.,grondvorm,"betekenis in eenvoudig Nederlands (infinitief/grondvorm)."\n- Zet het doelwoord of de uitdrukking precies één keer tussen {{c1::...}}, in de vorm die in de zin staat.\n- Eindig de zin met . ! of ?, zonder spatie tussen dat teken en de komma.\n- Gebruik zinnen op B1-B2-niveau uit het dagelijks leven. Geef 3 regels per woord.\nSchrijf je gewone uitleg zoals altijd; voeg het codeblok alleen aan het eind toe.\n\nAls ik "ANKI ALLES" schrijf: geef voor alle woorden en uitdrukkingen die ik sinds mijn vorige "ANKI ALLES" (of sinds het begin van dit gesprek) heb gevraagd, Anki-regels in één codeblok, zonder uitleg. Herhaal geen woorden; 2 regels per woord is genoeg.',
+ en:'From now on, at the very end of every explanation of a word or phrase, give Anki card lines in a separate code block. Rules:\n- One card per line; no numbers, bullets or other text inside the block.\n- Format: Dutch sentence.,base form,"English meaning (Dutch infinitive/base form)."\n- Put the target word or phrase in the sentence exactly once inside {{c1::...}}, in the form used in the sentence.\n- End the sentence with . ! or ?, with no space between that mark and the comma.\n- Use B1-B2 level sentences from everyday life. Give 3 lines per word.\nKeep writing your normal explanation; only add the code block at the end.\n\nIf I write "ANKI BULK": for all words and phrases I asked about since my previous "ANKI BULK" (or since the start of this chat), give Anki lines in one code block, with no explanation. Don\'t repeat words; 2 lines per word is enough.'
+};
+var HELP={
+ tr:{
+  title:'Yardım',back:'Geri',jump:['Nedir','Gerekenler','Kurulum','Kullanım','Sorunlar'],
+  s1_t:'Bu ne işe yarar?',
+  s1_p:"ChatGPT'de sorduğun Hollandaca kelimeleri Anki'ye boşluk doldurmalı (Cloze) kart olarak ekler. Kartları tek tek elle yazmazsın: ChatGPT'nin verdiği satırları kopyalar, buraya yapıştırır ve tek dokunuşla hepsini Anki'ye aktarırsın.",
+  flow:[['ChatGPT','Kelimeyi sorarsın, cevabın sonunda kart satırları gelir'],['Anki Ekle','Satırları yapıştırır, kartları önizlersin'],['Kısayollar','Kartları dosya yapıp Anki\'ye verir'],['Anki','İçe aktarmayı onaylarsın, kartlar destende']],
+  fmt_t:'Bir satır nasıl karta dönüşür?',fmt_mean:'Söylenmek/Homurdanmak (mopperen).',fmt_front:'Ön yüz',fmt_back:'Arka yüz',
+  fmt_p:"Cümlenin sonundaki noktadan hemen sonra gelen ilk virgül ön ve arka yüzü ayırır. {{c1::...}} içindeki kelime kartta gizlenir, sen hatırlamaya çalışırsın.",
+  s2_t:'Neler gerekli?',s2_p:'Hazır olanları işaretle. İşaretlerin bu telefonda saklanır.',
+  req:[['iPhone veya iPad','Kısayollar ve Anki bağlantıları yalnızca Apple cihazlarda çalışır. Android\'de ve bilgisayarda bu uygulama kart ekleyemez.'],['AnkiMobile','App Store\'daki resmi Anki uygulaması. Ücretli, bir kez satın alınır.'],['Kısayollar uygulaması','iPhone\'da hazır gelir. Sildiysen App Store\'dan yeniden indir.'],['ChatGPT','Kelimeleri sorduğun ve kart satırlarını aldığın yer.'],['Anki\'de bir deste','Kartların gideceği deste. Cloze not tipi Anki\'de hazır gelir.']],
+  s3_t:'Bir kerelik kurulum',s3_p:'Bu adımları sadece ilk seferde yaparsın.',
+  steps3:[
+   ['AnkiMobile\'ı kur','App Store\'dan indir ve bir kez aç. AnkiWeb hesabın varsa giriş yapıp senkronize et, kartların bilgisayarına da gider.'],
+   ['Anki\'de desteyi oluştur','Anki kartları sadece var olan bir desteye ekler, olmayan desteyi kendisi oluşturmaz. Anki\'nin deste listesinde yeni bir deste oluştur. Sonra bu uygulamada Deste kısmında + Yeni deste\'ye dokunup aynı adı yaz. Büyük/küçük harf ve Türkçe karakterler birebir aynı olmalı.'],
+   ['Not tipini ve alan adlarını eşleştir','Anki\'de kart ekleme (Add) ekranını aç ve not tipi olarak Cloze\'u seç. Alan adları Anki\'nin diline göre değişir, örneğin İngilizcede Text, Hollandacada Tekst. Gördüğün adları bu uygulamanın ayarlarına aynen yaz.'],
+   ['Anki Aktar kısayolunu ekle','Toplu aktarma Kısayollar uygulamasıyla çalışır. Hazır kısayolu ekle\'ye dokun, açılan ekranda Kısayol Ekle (Add Shortcut) düğmesine bas. Adını değiştirme, Anki Aktar olarak kalmalı.'],
+   ['ChatGPT\'yi hazırla','ChatGPT\'nin her açıklamanın sonunda kart satırlarını vermesi için aşağıdaki talimatı kopyala.'],
+   ['Ana ekrana ekle','Bu sayfayı Safari\'de aç, Paylaş\'a ve ardından Ana Ekrana Ekle\'ye dokun. Uygulama tam ekran açılır. Ana ekrandan açınca destelerini bir kez yeniden eklemen gerekebilir.']
+  ],
+  btn_appstore:'App Store\'da aç',btn_adddeck:'Bu uygulamada deste ekle',map_anki:'Anki\'de gördüğün',map_app:'Ayarlara yazacağın',btn_settings:'Ayarları aç',
+  btn_shortcut:'Hazır kısayolu ekle',manual_t:'Kendin kurmak istersen',
+  manual_steps:['Kısayollar\'da + ile yeni bir kısayol oluştur, adını Anki Aktar yap.','Set Name eylemini ekle: girdi Shortcut Input, ad kartlar.csv. Yanındaki oka dokun ve uzantıyı gizleme seçeneğini kapalı bırak.','Open File eylemini ekle: dosya Renamed Item, uygulama olarak Default App yerine Anki\'yi seç.'],
+  manual_note:'Bunlar eylemlerin İngilizce adları. iPhone\'un dili farklıysa kendi dilinde görünür.',
+  btn_copy:'Talimatı kopyala',copied:'Kopyalandı',show_instr:'Talimatı göster',where_t:'Nereye yapıştırılır?',
+  where:['Hızlı yol: Kelimeleri sorduğun sohbete ilk mesaj olarak yapıştırıp gönder. Çok uzun sohbetlerde ChatGPT kuralı unutabilir, o zaman talimatı yeniden gönder.','Kalıcı yol: ChatGPT\'de bir proje oluştur (örneğin Hollandaca), talimatı proje talimatlarına yapıştır ve kelimeleri o projenin sohbetlerinde sor. Bu özellik hesabında yoksa hızlı yolu kullan.'],
+  path:['Safari','Paylaş','Ana Ekrana Ekle'],
+  s4_t:'Günlük kullanım',
+  steps4:[['ChatGPT\'de kelimeyi sor','Örneğin: mopperen ne demek? Cevabın sonunda kart satırlarının olduğu bir kod bloğu gelir.'],['Kod bloğunu kopyala','Kod bloğunun sağ üst köşesindeki kopyala simgesine dokun.'],['Desteyi seç ve Yapıştır\'a dokun','Kartlar aşağıda önizlenir. Kesik çizgili kırmızı kutular okunamayan satırlardır, bunlar aktarılmaz.'],['Turuncu düğmeye dokun','Safari, Kısayollar\'ı açmak için izin ister. Aç\'a dokun.'],['Anki\'de içe aktarmayı onayla','Anki\'nin içe aktarma ekranında desteyi kontrol et ve onayla. Kartlar destene eklenir.']],
+  tip_bulk_t:'Akşam hepsini birden almak için',tip_bulk:'Aynı ChatGPT sohbetine şunu yaz, o gün sorduğun bütün kelimeler için tek bir kod bloğu gelir:',trigger:'ANKI TOPLU',btn_copy_trigger:'Kopyala',
+  tip_single:'Tek bir kartı göndermek için kartın altındaki Tek gönder\'i de kullanabilirsin. Bu yol her kart için Anki\'yi ayrı açar.',
+  s5_t:'Sorun giderme',
+  faq:[['Kart Anki\'ye eklenmedi','Desteyi Anki\'de oluşturduğundan ve adın birebir aynı olduğundan emin ol. Ayarlar\'daki not tipi ve alan adları da Anki\'dekiyle aynı olmalı.'],['Anki "No such notetype" hatası verdi','Ayarlar\'daki not tipi adı Anki\'dekiyle aynı değil. Anki\'nin kart ekleme ekranında görünen adı aynen yaz, örneğin Cloze.'],['Turuncu düğmeye basınca kısayol bulunamadı','Kısayolun adı Ayarlar\'daki Kısayol adı ile aynı olmalı. Varsayılan ad Anki Aktar.'],['Anki boş ya da yanlış bir dosya açtı','Kısayolda Set Name eyleminin Shortcut Input\'u kartlar.csv olarak adlandırdığını, Open File eyleminin de Renamed Item\'ı Anki\'de açtığını kontrol et.'],['Bir satır okunamadı','Satırda {{c1::...}} yoksa ya da cümle nokta, ! veya ? ile bitmiyorsa ön ve arka yüz ayrılamaz. Satırı kutuda düzelt ya da ChatGPT\'den o kelimeyi yeniden iste.'],['Destelerim ve ayarlarım kayboldu','Ana ekrandan açılan uygulama Safari\'den ayrı bir hafıza kullanır. Desteleri ve ayarları bir kez yeniden gir.'],['Android\'de veya bilgisayarda çalışır mı?','Hayır. Kart ekleme Kısayollar ve AnkiMobile ile çalıştığı için sadece iPhone ve iPad\'de çalışır.']]
+ },
+ nl:{
+  title:'Hulp',back:'Terug',jump:['Wat is het','Nodig','Instellen','Gebruik','Problemen'],
+  s1_t:'Wat doet deze app?',
+  s1_p:'Hij zet Nederlandse woorden die je aan ChatGPT vraagt als invulkaarten (Cloze) in Anki. Je typt de kaarten niet zelf: je kopieert de regels van ChatGPT, plakt ze hier en zet ze met één tik allemaal in Anki.',
+  flow:[['ChatGPT','Je vraagt een woord, aan het eind van het antwoord staan kaartregels'],['Naar Anki','Je plakt de regels en bekijkt de kaarten'],['Opdrachten','Maakt een bestand van de kaarten en geeft het aan Anki'],['Anki','Je bevestigt het importeren, de kaarten staan in je stapel']],
+  fmt_t:'Hoe wordt een regel een kaart?',fmt_mean:'Klagen, brommen (mopperen).',fmt_front:'Voorkant',fmt_back:'Achterkant',
+  fmt_p:'De eerste komma direct na de punt aan het eind van de zin scheidt voor- en achterkant. Het woord tussen {{c1::...}} wordt op de kaart verborgen, en jij probeert het te onthouden.',
+  s2_t:'Wat heb je nodig?',s2_p:'Vink aan wat je al hebt. Je vinkjes worden op deze telefoon bewaard.',
+  req:[['iPhone of iPad','Opdrachten en Anki-links werken alleen op Apple-apparaten. Op Android en op de computer kan deze app geen kaarten toevoegen.'],['AnkiMobile','De officiële Anki-app in de App Store. Betaald, je koopt hem één keer.'],['De app Opdrachten','Staat standaard op je iPhone. Verwijderd? Download hem opnieuw uit de App Store.'],['ChatGPT','Waar je de woorden vraagt en de kaartregels krijgt.'],['Een stapel in Anki','De stapel waar de kaarten naartoe gaan. Het notitietype Cloze zit standaard in Anki.']],
+  s3_t:'Eenmalig instellen',s3_p:'Deze stappen doe je alleen de eerste keer.',
+  steps3:[
+   ['Installeer AnkiMobile','Download hem uit de App Store en open hem één keer. Heb je een AnkiWeb-account, log dan in en synchroniseer, dan komen je kaarten ook op je computer.'],
+   ['Maak de stapel aan in Anki','Anki voegt kaarten alleen toe aan een stapel die al bestaat; een ontbrekende stapel maakt hij niet zelf aan. Maak in de stapellijst van Anki een nieuwe stapel. Tik daarna in deze app bij Stapel op + Nieuwe stapel en typ precies dezelfde naam, inclusief hoofdletters en speciale tekens.'],
+   ['Koppel notitietype en veldnamen','Open in Anki het scherm om een kaart toe te voegen (Add) en kies Cloze als notitietype. De veldnamen hangen af van de taal van Anki, bijvoorbeeld Text in het Engels en Tekst in het Nederlands. Typ de namen die je ziet precies zo over in de instellingen van deze app.'],
+   ['Voeg de opdracht Anki Aktar toe','Alles tegelijk importeren werkt via de app Opdrachten. Tik op Kant-en-klare opdracht toevoegen en daarna op Voeg opdracht toe. Verander de naam niet: hij moet Anki Aktar blijven.'],
+   ['Bereid ChatGPT voor','Kopieer de instructie hieronder, zodat ChatGPT aan het eind van elke uitleg kaartregels geeft.'],
+   ['Zet hem op je beginscherm','Open deze pagina in Safari, tik op Deel en daarna op Zet op beginscherm. De app opent dan schermvullend. Open je hem vanaf het beginscherm, dan moet je je stapels mogelijk één keer opnieuw toevoegen.']
+  ],
+  btn_appstore:'Openen in de App Store',btn_adddeck:'Stapel toevoegen in deze app',map_anki:'Wat je in Anki ziet',map_app:'Wat je in de instellingen typt',btn_settings:'Instellingen openen',
+  btn_shortcut:'Kant-en-klare opdracht toevoegen',manual_t:'Zelf instellen',
+  manual_steps:['Maak in Opdrachten met + een nieuwe opdracht en noem hem Anki Aktar.','Voeg de actie Set Name toe: invoer Shortcut Input, naam kartlar.csv. Tik op het pijltje en laat de optie om de extensie te verbergen uit.','Voeg de actie Open File toe: bestand Renamed Item, en kies Anki in plaats van Default App.'],
+  manual_note:'Dit zijn de Engelse namen van de acties. Staat je iPhone in een andere taal, dan zie je ze in die taal.',
+  btn_copy:'Instructie kopiëren',copied:'Gekopieerd',show_instr:'Instructie tonen',where_t:'Waar plak je hem?',
+  where:['Snelle manier: plak hem als eerste bericht in het gesprek waarin je woorden vraagt en verstuur hem. In heel lange gesprekken kan ChatGPT de regel vergeten; stuur hem dan opnieuw.','Blijvende manier: maak in ChatGPT een project (bijvoorbeeld Nederlands), plak de instructie in de projectinstructies en vraag je woorden in gesprekken binnen dat project. Heb je die functie niet, gebruik dan de snelle manier.'],
+  path:['Safari','Deel','Zet op beginscherm'],
+  s4_t:'Dagelijks gebruik',
+  steps4:[['Vraag het woord aan ChatGPT','Bijvoorbeeld: wat betekent mopperen? Aan het eind van het antwoord staat een codeblok met kaartregels.'],['Kopieer het codeblok','Tik op het kopieersymbool rechtsboven in het codeblok.'],['Kies de stapel en tik op Plakken','De kaarten verschijnen hieronder. Rode vakken met een stippellijn zijn onleesbare regels; die worden niet geïmporteerd.'],['Tik op de oranje knop','Safari vraagt toestemming om Opdrachten te openen. Tik op Open.'],['Bevestig het importeren in Anki','Controleer de stapel in het importscherm van Anki en bevestig. De kaarten staan nu in je stapel.']],
+  tip_bulk_t:'Alles in één keer, \'s avonds',tip_bulk:'Schrijf dit in hetzelfde ChatGPT-gesprek en je krijgt één codeblok voor alle woorden van die dag:',trigger:'ANKI ALLES',btn_copy_trigger:'Kopiëren',
+  tip_single:'Wil je één kaart sturen, gebruik dan Los verzenden onder de kaart. Dan opent Anki voor elke kaart apart.',
+  s5_t:'Problemen oplossen',
+  faq:[['De kaart is niet in Anki gekomen','Controleer of je de stapel in Anki hebt aangemaakt en of de naam precies hetzelfde is. Ook het notitietype en de veldnamen in de instellingen moeten overeenkomen met Anki.'],['Anki geeft de fout "No such notetype"','Het notitietype in de instellingen komt niet overeen met Anki. Typ de naam precies zoals in het toevoegscherm van Anki, bijvoorbeeld Cloze.'],['De opdracht wordt niet gevonden','De naam van de opdracht moet gelijk zijn aan Naam van de opdracht in de instellingen. Standaard is dat Anki Aktar.'],['Anki opent een leeg of verkeerd bestand','Controleer in de opdracht dat Set Name de Shortcut Input kartlar.csv noemt en dat Open File het Renamed Item in Anki opent.'],['Een regel is onleesbaar','Zonder {{c1::...}}, of als de zin niet eindigt op . ! of ?, kunnen voor- en achterkant niet worden gescheiden. Verbeter de regel in het vak of vraag het woord opnieuw aan ChatGPT.'],['Mijn stapels en instellingen zijn weg','De app op je beginscherm gebruikt een ander geheugen dan Safari. Voer je stapels en instellingen één keer opnieuw in.'],['Werkt het op Android of de computer?','Nee. Kaarten toevoegen gaat via Opdrachten en AnkiMobile, dus het werkt alleen op iPhone en iPad.']]
+ },
+ en:{
+  title:'Help',back:'Back',jump:['What it does','You need','Setup','Daily use','Problems'],
+  s1_t:'What does this app do?',
+  s1_p:"It adds the Dutch words you ask ChatGPT about to Anki as fill-in-the-blank (Cloze) cards. You don't type the cards by hand: you copy ChatGPT's lines, paste them here, and send them all to Anki with one tap.",
+  flow:[['ChatGPT','You ask about a word; card lines come at the end of the answer'],['Add to Anki','You paste the lines and preview the cards'],['Shortcuts','Turns the cards into a file and hands it to Anki'],['Anki','You confirm the import; the cards are in your deck']],
+  fmt_t:'How does a line become a card?',fmt_mean:'To grumble, to moan (mopperen).',fmt_front:'Front',fmt_back:'Back',
+  fmt_p:'The first comma right after the period at the end of the sentence splits the front from the back. The word inside {{c1::...}} is hidden on the card, and you try to recall it.',
+  s2_t:'What you need',s2_p:'Tick what you already have. Your ticks are saved on this phone.',
+  req:[['iPhone or iPad','Shortcuts and Anki links only work on Apple devices. On Android and on a computer, this app can\'t add cards.'],['AnkiMobile','The official Anki app in the App Store. Paid, one-time purchase.'],['The Shortcuts app','Comes with your iPhone. Deleted it? Download it again from the App Store.'],['ChatGPT','Where you ask about words and get the card lines.'],['A deck in Anki','The deck your cards go to. The Cloze note type comes with Anki.']],
+  s3_t:'One-time setup',s3_p:'You only do these steps the first time.',
+  steps3:[
+   ['Install AnkiMobile','Download it from the App Store and open it once. If you have an AnkiWeb account, sign in and sync so your cards reach your computer too.'],
+   ['Create the deck in Anki','Anki only adds cards to a deck that already exists; it won\'t create a missing one. Create a new deck in Anki\'s deck list. Then, in this app, tap + New deck under Deck and type exactly the same name, including capitals and special characters.'],
+   ['Match the note type and field names','In Anki, open the screen for adding a card (Add) and pick Cloze as the note type. The field names depend on Anki\'s language, for example Text in English and Tekst in Dutch. Type the names you see into this app\'s settings exactly as shown.'],
+   ['Add the Anki Aktar shortcut','Bulk import works through the Shortcuts app. Tap Add ready-made shortcut, then Add Shortcut on the screen that opens. Don\'t rename it: it has to stay Anki Aktar.'],
+   ['Prepare ChatGPT','Copy the instruction below so ChatGPT adds card lines at the end of every explanation.'],
+   ['Add it to your Home Screen','Open this page in Safari, tap Share, then Add to Home Screen. The app opens full screen. When you open it from the Home Screen, you may need to add your decks once more.']
+  ],
+  btn_appstore:'Open in the App Store',btn_adddeck:'Add a deck in this app',map_anki:'What you see in Anki',map_app:'What you type in settings',btn_settings:'Open settings',
+  btn_shortcut:'Add ready-made shortcut',manual_t:'Set it up yourself',
+  manual_steps:['In Shortcuts, tap + to create a shortcut and name it Anki Aktar.','Add the Set Name action: input Shortcut Input, name kartlar.csv. Tap the arrow and leave the option to hide the file extension off.','Add the Open File action: file Renamed Item, and pick Anki instead of Default App.'],
+  manual_note:'These are the English action names. If your iPhone uses another language, they appear in that language.',
+  btn_copy:'Copy instruction',copied:'Copied',show_instr:'Show instruction',where_t:'Where do you paste it?',
+  where:['Quick way: paste it as the first message in the chat where you ask about words, and send it. In very long chats ChatGPT can forget the rule; send it again if that happens.','Lasting way: create a project in ChatGPT (for example Dutch), paste the instruction into the project instructions, and ask about words in that project\'s chats. If you don\'t have that feature, use the quick way.'],
+  path:['Safari','Share','Add to Home Screen'],
+  s4_t:'Daily use',
+  steps4:[['Ask ChatGPT about the word','For example: what does mopperen mean? A code block with card lines comes at the end of the answer.'],['Copy the code block','Tap the copy icon in the top-right corner of the code block.'],['Pick the deck and tap Paste','The cards are previewed below. Red boxes with a dashed line are lines that couldn\'t be read; they won\'t be imported.'],['Tap the orange button','Safari asks for permission to open Shortcuts. Tap Open.'],['Confirm the import in Anki','Check the deck on Anki\'s import screen and confirm. The cards are now in your deck.']],
+  tip_bulk_t:'Everything at once in the evening',tip_bulk:'Write this in the same ChatGPT chat to get one code block for all the words of the day:',trigger:'ANKI BULK',btn_copy_trigger:'Copy',
+  tip_single:'To send a single card, you can also use Send one under the card. That opens Anki separately for each card.',
+  s5_t:'Troubleshooting',
+  faq:[['The card didn\'t reach Anki','Make sure you created the deck in Anki and that the name matches exactly. The note type and field names in settings must match Anki too.'],['Anki says "No such notetype"','The note type in settings doesn\'t match Anki. Type the name exactly as it appears on Anki\'s Add screen, for example Cloze.'],['The shortcut can\'t be found','The shortcut\'s name must match Shortcut name in settings. The default is Anki Aktar.'],['Anki opened an empty or wrong file','In the shortcut, check that Set Name names the Shortcut Input kartlar.csv and that Open File opens the Renamed Item in Anki.'],['A line couldn\'t be read','Without {{c1::...}}, or if the sentence doesn\'t end in . ! or ?, the front and back can\'t be split. Fix the line in the box or ask ChatGPT for that word again.'],['My decks and settings are gone','The Home Screen app uses separate storage from Safari. Enter your decks and settings once more.'],['Does it work on Android or a computer?','No. Adding cards works through Shortcuts and AnkiMobile, so it only works on iPhone and iPad.']]
+ }
+};
+
+var CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+var HELP_IDS=['h-what','h-need','h-setup','h-use','h-fix'];
+function hx(v){return esc(String(v));}
+function mapHtml(H){
+  var rows=[['Cloze',t('noteType'),cfg.type||'Cloze'],['Tekst / Text',t('front'),cfg.f1||'Text'],['Back Extra',t('back'),cfg.f2||'Back Extra']];
+  var h='<div class="map"><small>'+hx(H.map_anki)+'</small><span></span><small>'+hx(H.map_app)+'</small>';
+  rows.forEach(function(r){h+='<div class="mcell">'+hx(r[0])+'</div><span class="marr" aria-hidden="true">→</span><div class="mcell"><em>'+hx(r[1])+'</em>'+hx(r[2])+'</div>';});
+  return h+'</div>';
+}
+function renderHelp(){
+  var H=HELP[lang]||HELP.tr,h='';
+  h+='<div class="help-top"><button class="back" type="button" data-act="close">'+CHEV+hx(H.back)+'</button></div>';
+  h+='<h1 class="help-h1">'+hx(H.title)+'</h1>';
+  h+='<nav class="jump">'+H.jump.map(function(j,i){return '<button type="button" data-to="'+HELP_IDS[i]+'">'+hx(j)+'</button>';}).join('')+'</nav>';
+  h+='<section id="h-what"><h2>'+hx(H.s1_t)+'</h2><p>'+hx(H.s1_p)+'</p><ol class="flow">';
+  H.flow.forEach(function(f,i){h+='<li><span class="fn">'+(i+1)+'</span><div><b>'+hx(f[0])+'</b><span class="s">'+hx(f[1])+'</span></div></li>';});
+  h+='</ol><h3>'+hx(H.fmt_t)+'</h3><div class="fmt"><code class="line"><span class="seg-f">'+hx(EXAMPLE_FRONT)+'</span><span class="seg-c">,</span><span class="seg-b">moppert,"'+hx(H.fmt_mean)+'"</span></code>'
+    +'<div class="fmt-out"><div class="fo"><small><i class="dot f"></i>'+hx(H.fmt_front)+'</small><p class="nl">De docent <mark>[…]</mark> omdat de cursisten geen huiswerk hebben.</p></div>'
+    +'<div class="fo"><small><i class="dot b"></i>'+hx(H.fmt_back)+'</small><p>moppert, '+hx(H.fmt_mean)+'</p></div></div><p class="cap">'+hx(H.fmt_p)+'</p></div></section>';
+  h+='<section id="h-need"><h2>'+hx(H.s2_t)+'</h2><p>'+hx(H.s2_p)+'</p><ul class="checks">';
+  H.req.forEach(function(r,i){var on=Array.isArray(cfg.req)&&cfg.req[i];
+    h+='<li><label><input type="checkbox" data-req="'+i+'"'+(on?' checked':'')+'><span class="box" aria-hidden="true"></span><div><b>'+hx(r[0])+'</b><span class="s">'+hx(r[1])+'</span></div></label></li>';});
+  h+='</ul></section>';
+  h+='<section id="h-setup"><h2>'+hx(H.s3_t)+'</h2><p>'+hx(H.s3_p)+'</p><ol class="steps">';
+  H.steps3.forEach(function(st,i){
+    var x='';
+    if(i===0) x='<a class="hbtn" href="'+APPSTORE_URL+'" target="_blank" rel="noopener">'+hx(H.btn_appstore)+'</a>';
+    if(i===1) x='<button class="hbtn ghost" type="button" data-act="adddeck">'+hx(H.btn_adddeck)+'</button>';
+    if(i===2) x=mapHtml(H)+'<button class="hbtn ghost" type="button" data-act="settings">'+hx(H.btn_settings)+'</button>';
+    if(i===3) x='<a class="hbtn" href="'+SHORTCUT_URL+'" target="_blank" rel="noopener">'+hx(H.btn_shortcut)+'</a>'
+      +'<details class="more"><summary>'+hx(H.manual_t)+'</summary><div class="acts"><div class="act">Set name of <em>Shortcut Input</em> to <em>kartlar.csv</em></div><div class="act">Open <em>Renamed Item</em> in <em>Anki</em></div></div>'
+      +'<ol class="sub">'+H.manual_steps.map(function(m){return '<li>'+hx(m)+'</li>';}).join('')+'</ol><p class="cap">'+hx(H.manual_note)+'</p></details>';
+    if(i===4) x='<button class="hbtn" type="button" data-copy="instr">'+hx(H.btn_copy)+'</button>'
+      +'<details class="more"><summary>'+hx(H.show_instr)+'</summary><pre class="instr">'+hx(INSTR[lang]||INSTR.tr)+'</pre></details>'
+      +'<h4>'+hx(H.where_t)+'</h4><ul class="where">'+H.where.map(function(w){return '<li>'+hx(w)+'</li>';}).join('')+'</ul>';
+    if(i===5) x='<div class="path">'+H.path.map(function(q){return '<span>'+hx(q)+'</span>';}).join('<i aria-hidden="true">›</i>')+'</div>';
+    h+='<li><span class="sn">'+(i+1)+'</span><div class="sb"><h3>'+hx(st[0])+'</h3><p>'+hx(st[1])+'</p>'+x+'</div></li>';
+  });
+  h+='</ol></section>';
+  h+='<section id="h-use"><h2>'+hx(H.s4_t)+'</h2><ol class="steps">';
+  H.steps4.forEach(function(st,i){h+='<li><span class="sn">'+(i+1)+'</span><div class="sb"><h3>'+hx(st[0])+'</h3><p>'+hx(st[1])+'</p></div></li>';});
+  h+='</ol><div class="tip"><h3>'+hx(H.tip_bulk_t)+'</h3><p>'+hx(H.tip_bulk)+'</p><div class="trig"><span class="kbd">'+hx(H.trigger)+'</span><button class="hbtn ghost sm" type="button" data-copy="trigger">'+hx(H.btn_copy_trigger)+'</button></div></div>'
+    +'<p class="cap">'+hx(H.tip_single)+'</p></section>';
+  h+='<section id="h-fix"><h2>'+hx(H.s5_t)+'</h2>'+H.faq.map(function(f){return '<details class="faq"><summary>'+hx(f[0])+'</summary><p>'+hx(f[1])+'</p></details>';}).join('')+'</section>';
+  h+='<p class="ver">'+hx(t('version'))+'</p>';
+  $('help').innerHTML=h;
+}
+function fallbackCopy(txt){
+  var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');
+  ta.style.position='absolute';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();
+  var r=false;try{r=document.execCommand('copy');}catch(e){}ta.remove();return r;
+}
+function copyText(txt,btn){
+  var H=HELP[lang]||HELP.tr;
+  if(!btn.getAttribute('data-orig'))btn.setAttribute('data-orig',btn.textContent);
+  function ok(){btn.textContent=H.copied;toast(H.copied);setTimeout(function(){btn.textContent=btn.getAttribute('data-orig');},1600);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){if(fallbackCopy(txt))ok();});}
+  else if(fallbackCopy(txt))ok();
+}
+var helpPushed=false;
+function showHelp(on){
+  document.body.classList.toggle('in-help',on);
+  if(on){renderHelp();window.scrollTo(0,0);}
+}
+function closeHelp(then){
+  if(helpPushed){helpPushed=false;history.back();}else{location.hash='';}
+  if(then)setTimeout(then,200);
+}
+
 var KEY='anki-ekle-v1';
-var cfg={deck:'Kendi cümlelerim link üzeri notlardan',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:'',sc_name:'Anki Aktar'};
+var cfg={deck:'',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:'',sc_name:'Anki Aktar'};
 var draft={text:'',sent:[]};
 try{var s1=JSON.parse(localStorage.getItem(KEY+'-cfg')||'null');if(s1)for(var k in s1)cfg[k]=s1[k];}catch(e){}
 try{var s2=JSON.parse(localStorage.getItem(KEY+'-draft')||'null');if(s2){draft.text=s2.text||'';draft.sent=s2.sent||[];}}catch(e){}
 if(!Array.isArray(cfg.decks))cfg.decks=[];
 if(!cfg.sc_name)cfg.sc_name='Anki Aktar';
 lang=I18N[cfg.lang]?cfg.lang:'tr';
-if(!cfg.deck)cfg.deck='Günlük';
-if(cfg.decks.indexOf(cfg.deck)<0)cfg.decks.unshift(cfg.deck);
+if(cfg.deck&&cfg.decks.indexOf(cfg.deck)<0)cfg.decks.unshift(cfg.deck);
 function saveCfg(){try{localStorage.setItem(KEY+'-cfg',JSON.stringify(cfg));}catch(e){}}
 function saveDraft(){try{localStorage.setItem(KEY+'-draft',JSON.stringify(draft));}catch(e){}}
 
@@ -402,6 +664,7 @@ function renderChips(){
   add.type='button';add.className='chip add';add.textContent=t('newDeck');
   add.addEventListener('click',function(){$('newrow').hidden=false;$('newname').focus();});
   box.appendChild(add);
+  if(!cfg.decks.length){$('newrow').hidden=false;$('newno').hidden=true;}else{$('newno').hidden=false;}
   renderDeckAdmin();
 }
 function renderDeckAdmin(){
@@ -410,16 +673,15 @@ function renderDeckAdmin(){
     var row=document.createElement('div');row.className='dk';
     var n=document.createElement('span');n.textContent=d;row.appendChild(n);
     var rm=document.createElement('button');rm.type='button';rm.textContent=t('remove');
-    rm.disabled=cfg.decks.length<2;
-    rm.addEventListener('click',function(){
+        rm.addEventListener('click',function(){
       cfg.decks=cfg.decks.filter(function(x){return x!==d;});
-      if(cfg.deck===d)cfg.deck=cfg.decks[0];
+      if(cfg.deck===d)cfg.deck=cfg.decks[0]||'';
       saveCfg();renderChips();render();
     });
     row.appendChild(rm);box.appendChild(row);
   });
 }
-function closeNew(){$('newname').value='';$('newrow').hidden=true;}
+function closeNew(){$('newname').value='';if(cfg.decks.length)$('newrow').hidden=true;}
 $('newok').addEventListener('click',function(){
   var n=$('newname').value.trim().replace(/\s*::\s*/g,'::');
   if(!n){$('newname').focus();return;}
@@ -471,7 +733,7 @@ var SEND_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 function render(){
   var cards=parseAll(draft.text);
   var list=$('list');list.innerHTML='';
-  var ok=0,bad=0,done=0;okIdx=[];
+  var ok=0,bad=0,done=0;okIdx=[];var hasDeck=!!cfg.deck;
   cards.forEach(function(c,i){
     var el=document.createElement('article');
     var isSent=draft.sent.indexOf(i)>=0;
@@ -486,7 +748,7 @@ function render(){
       var fr=esc(c.front).replace(/\{\{c\d+::([\s\S]*?)(?:::[\s\S]*?)?\}\}/g,'<mark>$1</mark>');
       html='<p class="nl">'+fr+'</p>'+(c.back?'<p class="tr">'+esc(c.back)+'</p>':'');
       foot=(isSent?'<span class="st ok">'+t('stSent')+'</span>':'<span class="st">'+t('stReady')+'</span>')
-        +'<a class="mini" data-i="'+i+'" href="'+ankiUrl(cfg,c).replace(/&/g,'&amp;')+'">'+t('single')+'</a>';
+        +(hasDeck?'<a class="mini" data-i="'+i+'" href="'+ankiUrl(cfg,c).replace(/&/g,'&amp;')+'">'+t('single')+'</a>':'');
     }
     el.innerHTML=html+'<div class="foot">'+foot+'</div>';
     list.appendChild(el);
@@ -500,28 +762,47 @@ function render(){
     sum='<b>'+tn('ready1','readyN',ok)+'</b>';
     if(bad) sum+=', '+tn('bad1','badN',bad);
     if(done) sum+=', '+tn('sent1','sentN',done);
-    sum+='. '+t('target')+': '+esc(cfg.deck);
+    if(hasDeck) sum+='. '+t('target')+': '+esc(cfg.deck);
   }
   $('sum').innerHTML=sum;
 
   var sc=$('sc');
-  if(ok){
+  if(ok&&hasDeck){
     sc.classList.remove('off');sc.removeAttribute('aria-disabled');
     sc.setAttribute('href','shortcuts://run-shortcut?name='+enc(cfg.sc_name.trim()||'Anki Aktar')+'&input=text&text='+enc(bulkText(cfg,cards)));
     sc.innerHTML=esc(done===ok?t('again'):tn('cta1','ctaN',ok))+SEND_ICON;
   }else{
     sc.classList.add('off');sc.setAttribute('aria-disabled','true');sc.setAttribute('href','#');
-    sc.textContent=t('ctaOff');
+    sc.textContent=ok?t('needDeck'):t('ctaOff');
   }
-  $('dl').disabled=!ok;
+  $('dl').disabled=!ok||!hasDeck;
 }
 
 Array.prototype.forEach.call(document.querySelectorAll('#langs button'),function(b){
-  b.addEventListener('click',function(){lang=b.getAttribute('data-lang');cfg.lang=lang;saveCfg();applyLang();renderChips();render();});
+  b.addEventListener('click',function(){lang=b.getAttribute('data-lang');cfg.lang=lang;saveCfg();applyLang();renderChips();render();if(document.body.classList.contains('in-help'))renderHelp();});
+});
+$('helpbtn').addEventListener('click',function(){helpPushed=true;location.hash='help';});
+window.addEventListener('hashchange',function(){if(location.hash!=='#help')helpPushed=false;showHelp(location.hash==='#help');});
+$('help').addEventListener('click',function(e){
+  var el=e.target.closest('[data-to],[data-act],[data-copy]');if(!el)return;
+  if(el.hasAttribute('data-to')){var sec=document.getElementById(el.getAttribute('data-to'));
+    if(sec)sec.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
+  var act=el.getAttribute('data-act');
+  if(act==='close'){closeHelp();return;}
+  if(act==='adddeck'){closeHelp(function(){$('newrow').hidden=false;$('newname').focus();});return;}
+  if(act==='settings'){closeHelp(openSheet);return;}
+  var cp=el.getAttribute('data-copy');
+  if(cp==='instr')copyText(INSTR[lang]||INSTR.tr,el);
+  if(cp==='trigger')copyText((HELP[lang]||HELP.tr).trigger,el);
+});
+$('help').addEventListener('change',function(e){
+  var i=e.target.getAttribute&&e.target.getAttribute('data-req');if(i==null)return;
+  if(!Array.isArray(cfg.req))cfg.req=[];cfg.req[+i]=e.target.checked;saveCfg();
 });
 applyLang();
 renderChips();
 render();
+showHelp(location.hash==='#help');
 </script>
 </body>
 </html>
