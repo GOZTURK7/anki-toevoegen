@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anki'ye ekle</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Anki Ekle">
+<meta name="theme-color" content="#0b0b0c">
+<style>
+:root{--bg:#fafaf8;--fg:#18181a;--mut:#85857f;--line:#e6e6e1;--soft:#f1f1ed;--acc:#2f6feb;--ok:#1b7f45;--err:#c0352b}
+@media (prefers-color-scheme:dark){:root{--bg:#0b0b0c;--fg:#f1f1ee;--mut:#8d8d88;--line:#232326;--soft:#161618;--acc:#7aaeff;--ok:#4cc27d;--err:#ff7a70}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+main{max-width:560px;margin:0 auto;padding:20px 20px 130px}
+header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px}
+h1{font-size:22px;font-weight:650;letter-spacing:-.01em;margin:0}
+.link{background:none;border:0;padding:4px 0;font:inherit;font-size:14px;color:var(--mut);cursor:pointer}
+.link:active{color:var(--fg)}
+label{display:block;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+input,select,textarea{width:100%;font:inherit;color:var(--fg);background:var(--soft);border:1px solid transparent;border-radius:12px;padding:12px 14px;outline:none;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--line)}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px;text-overflow:ellipsis}
+textarea{min-height:130px;resize:vertical;line-height:1.45}
+.field{margin-bottom:22px}
+.inline{display:flex;gap:8px;margin-top:8px}
+.inline input{flex:1}
+.panel{background:var(--soft);border-radius:14px;padding:16px;margin:-8px 0 24px}
+.panel .field{margin-bottom:14px}
+.panel .field:last-child{margin-bottom:0}
+.panel input{background:var(--bg)}
+.two{display:flex;gap:10px}.two>div{flex:1}
+.hint{font-size:13px;color:var(--mut);margin:8px 0 0}
+.btn{display:flex;align-items:center;justify-content:center;min-height:50px;padding:0 18px;border-radius:14px;border:0;background:var(--fg);color:var(--bg);font:inherit;font-weight:600;text-decoration:none;width:100%;cursor:pointer}
+.btn.small{min-height:40px;width:auto;font-size:14px;padding:0 16px;border-radius:12px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn[aria-disabled=true]{opacity:.3;pointer-events:none}
+.sum{font-size:13px;color:var(--mut);margin:26px 0 10px}
+.card{padding:14px 0;border-top:1px solid var(--line)}
+.card:last-child{border-bottom:1px solid var(--line)}
+.card.sent .front,.card.sent .back{opacity:.45}
+.front{margin:0 0 4px;font-size:17px;line-height:1.4}
+.back{margin:0;color:var(--mut);font-size:14px}
+mark{background:none;color:var(--acc);font-weight:600}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;min-height:40px}
+.st{font-size:13px;color:var(--mut)}
+.st.ok{color:var(--ok)}.st.err{color:var(--err)}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line)}
+.bar>div{max-width:560px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.bar .link{white-space:nowrap}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Anki'ye ekle</h1>
+    <button class="link" id="gear" type="button">Ayarlar</button>
+  </header>
+
+  <section class="panel" id="panel" hidden>
+    <div class="field">
+      <label for="type">Not tipi</label>
+      <input id="type" autocomplete="off" autocapitalize="off">
+    </div>
+    <div class="two field">
+      <div><label for="f1">Ön alan</label><input id="f1" autocomplete="off" autocapitalize="off"></div>
+      <div><label for="f2">Arka alan</label><input id="f2" autocomplete="off" autocapitalize="off"></div>
+    </div>
+    <div class="field">
+      <label for="tags">Etiket (isteğe bağlı)</label>
+      <input id="tags" autocomplete="off" autocapitalize="off">
+    </div>
+  </section>
+
+  <div class="field">
+    <label for="deck">Deste</label>
+    <select id="deck"></select>
+    <div class="inline" id="newrow" hidden>
+      <input id="newname" placeholder="Yeni deste adı" autocomplete="off">
+      <button class="btn small" id="newok" type="button">Kullan</button>
+      <button class="btn small ghost" id="newno" type="button">Vazgeç</button>
+    </div>
+    <p class="hint" id="deckhint">Deste Anki'de önceden oluşturulmuş olmalı, Anki kendiliğinden oluşturmuyor. Liste sadece bu sayfada tutulur. Alt deste: Ana::Alt</p>
+    <button class="link" id="rmdeck" type="button">Bu desteyi listeden kaldır</button>
+  </div>
+
+  <div class="field">
+    <label for="txt">Kartlar</label>
+    <textarea id="txt" spellcheck="false" placeholder="Her satır bir kart. ChatGPT'nin verdiği satırları yapıştır."></textarea>
+  </div>
+
+  <div class="sum" id="sum"></div>
+  <div id="list"></div>
+</main>
+
+<div class="bar"><div>
+  <button class="link" id="clear" type="button">Temizle</button>
+  <a class="btn" id="next" href="#" aria-disabled="true">Anki'ye gönder</a>
+</div></div>
+
+<script>
+// ==PARSER==
+function splitCard(line){
+  var s=line.trim();
+  s=s.replace(/^(?:\d+\s*[.)]|[-*•])\s+/,'');
+  if(!s||/^```/.test(s)) return null;
+  var front=null,back=null;
+  var ci=s.indexOf('}}');
+  var start=ci>=0?ci:0;
+  var re=/[.!?…]["”']?\s*,/g;
+  re.lastIndex=start;
+  var m=re.exec(s);
+  if(m){
+    var cut=m.index+m[0].length;
+    front=s.slice(0,cut).replace(/\s*,$/,'');
+    back=s.slice(cut);
+  }else if(s.charAt(0)==='"'){
+    var q=s.match(/^"((?:[^"]|"")*)"\s*,\s*([\s\S]*)$/);
+    if(q){front=q[1].replace(/""/g,'"');back=q[2];}
+  }
+  if(front===null){
+    var d=s.match(/^([\s\S]*?)\s*(?:\t|\s\|\s|;)\s*([\s\S]*)$/);
+    if(d){front=d[1];back=d[2];}
+  }
+  if(front===null&&ci>=0){
+    var k=s.indexOf(',',ci);
+    if(k>0){front=s.slice(0,k);back=s.slice(k+1);}
+  }
+  if(front===null) return {raw:s,error:'Ön ve arka yüz ayrılamadı'};
+  front=front.trim();
+  if(/^["“]/.test(front)&&/["”]$/.test(front)) front=front.replace(/^["“]+/,'').replace(/["”]+$/,'').trim();
+  back=back.replace(/["“”]/g,'').trim().replace(/,(?=\S)/,', ');
+  var hasCloze=/\{\{c\d+::/.test(front);
+  return {raw:s,front:front,back:back,hasCloze:hasCloze,
+    error:!front?'Ön yüz boş':(!hasCloze?'Cümlede {{c1::...}} yok':null)};
+}
+function parseAll(text){
+  return text.split(/\r?\n/).map(splitCard).filter(Boolean);
+}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function enc(t){return encodeURIComponent(t);}
+function ankiUrl(cfg,c){
+  var u='anki://x-callback-url/addnote?type='+enc(cfg.type)+'&deck='+enc(cfg.deck)
+    +'&fld'+enc(cfg.f1)+'='+enc(esc(c.front))
+    +'&fld'+enc(cfg.f2)+'='+enc(esc(c.back));
+  if(cfg.tags.trim()) u+='&tags='+enc(cfg.tags.trim());
+  return u;
+}
+// ==END==
+
+var KEY='anki-ekle-v1';
+var cfg={deck:'Kendi cümlelerim link üzeri notlardan',decks:[],type:'Cloze',f1:'Tekst',f2:'Back Extra',tags:''};
+var draft={text:'',sent:[]};
+try{var s1=JSON.parse(localStorage.getItem(KEY+'-cfg')||'null');if(s1)for(var k in s1)cfg[k]=s1[k];}catch(e){}
+try{var s2=JSON.parse(localStorage.getItem(KEY+'-draft')||'null');if(s2){draft.text=s2.text||'';draft.sent=s2.sent||[];}}catch(e){}
+if(!Array.isArray(cfg.decks))cfg.decks=[];
+if(cfg.decks.indexOf(cfg.deck)<0)cfg.decks.unshift(cfg.deck);
+function saveCfg(){try{localStorage.setItem(KEY+'-cfg',JSON.stringify(cfg));}catch(e){}}
+function saveDraft(){try{localStorage.setItem(KEY+'-draft',JSON.stringify(draft));}catch(e){}}
+
+var $=function(id){return document.getElementById(id);};
+
+['type','f1','f2','tags'].forEach(function(id){
+  $(id).value=cfg[id];
+  $(id).addEventListener('input',function(){cfg[id]=$(id).value;saveCfg();render();});
+});
+$('gear').addEventListener('click',function(){var p=$('panel');p.hidden=!p.hidden;});
+
+function buildDecks(){
+  var sel=$('deck');sel.innerHTML='';
+  cfg.decks.forEach(function(d){
+    var o=document.createElement('option');o.value=d;o.textContent=d;
+    if(d===cfg.deck)o.selected=true;sel.appendChild(o);
+  });
+  var n=document.createElement('option');n.value='__new__';n.textContent='+ Yeni deste…';sel.appendChild(n);
+  $('rmdeck').hidden=cfg.decks.length<2;
+}
+$('deck').addEventListener('change',function(){
+  if($('deck').value==='__new__'){$('newrow').hidden=false;$('newname').focus();}
+  else{cfg.deck=$('deck').value;$('newrow').hidden=true;saveCfg();render();}
+});
+$('newok').addEventListener('click',function(){
+  var n=$('newname').value.trim().replace(/\s*::\s*/g,'::');
+  if(!n)return;
+  if(cfg.decks.indexOf(n)<0)cfg.decks.push(n);
+  cfg.deck=n;$('newname').value='';$('newrow').hidden=true;
+  saveCfg();buildDecks();render();
+});
+$('newno').addEventListener('click',function(){$('newname').value='';$('newrow').hidden=true;buildDecks();});
+$('rmdeck').addEventListener('click',function(){
+  cfg.decks=cfg.decks.filter(function(d){return d!==cfg.deck;});
+  cfg.deck=cfg.decks[0];saveCfg();buildDecks();render();
+});
+
+$('txt').value=draft.text;
+$('txt').addEventListener('input',function(){draft.text=$('txt').value;draft.sent=[];saveDraft();render();});
+$('clear').addEventListener('click',function(){draft={text:'',sent:[]};$('txt').value='';saveDraft();render();});
+
+function markSent(i){
+  if(draft.sent.indexOf(i)<0)draft.sent.push(i);
+  saveDraft();
+  setTimeout(render,400);
+}
+
+function render(){
+  var cards=parseAll(draft.text);
+  var list=$('list');list.innerHTML='';
+  var ok=0,bad=0,done=0,nextIdx=-1;
+  cards.forEach(function(c,i){
+    var el=document.createElement('div');
+    var isSent=draft.sent.indexOf(i)>=0;
+    el.className='card'+(isSent?' sent':'');
+    var fr=c.front?esc(c.front).replace(/\{\{c\d+::([\s\S]*?)(?:::[\s\S]*?)?\}\}/g,'<mark>$1</mark>'):esc(c.raw);
+    var html='<p class="front">'+fr+'</p>'+(c.back?'<p class="back">'+esc(c.back)+'</p>':'');
+    var meta='<div class="meta">';
+    if(c.error){bad++;meta+='<span class="st err">'+esc(c.error)+'</span>';}
+    else{
+      ok++;
+      if(isSent){done++;meta+='<span class="st ok">Gönderildi</span>';}
+      else{meta+='<span class="st">Bekliyor</span>';if(nextIdx<0)nextIdx=i;}
+      meta+='<a class="btn small ghost" data-i="'+i+'" href="'+ankiUrl(cfg,c).replace(/&/g,'&amp;')+'">'+(isSent?'Tekrar':'Gönder')+'</a>';
+    }
+    el.innerHTML=html+meta+'</div>';
+    list.appendChild(el);
+  });
+  Array.prototype.forEach.call(list.querySelectorAll('a[data-i]'),function(a){
+    a.addEventListener('click',function(){markSent(parseInt(a.getAttribute('data-i'),10));});
+  });
+  $('sum').textContent=cards.length?(ok+' kart'+(bad?' · '+bad+' sorunlu satır':'')+' · '+done+' gönderildi'):'';
+  var nx=$('next');
+  if(nextIdx>=0){
+    nx.setAttribute('href',ankiUrl(cfg,cards[nextIdx]));
+    nx.setAttribute('aria-disabled','false');
+    nx.textContent='Anki\'ye gönder ('+(done+1)+'/'+ok+')';
+    nx.onclick=function(){markSent(nextIdx);};
+  }else{
+    nx.setAttribute('href','#');
+    nx.setAttribute('aria-disabled','true');
+    nx.textContent=ok&&done===ok?'Hepsi gönderildi':'Anki\'ye gönder';
+    nx.onclick=function(e){e.preventDefault();};
+  }
+}
+buildDecks();
+render();
+</script>
+</body>
+</html>
